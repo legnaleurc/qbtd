@@ -2,6 +2,8 @@
 
 #include <QtNetwork/QLocalSocket>
 
+using qbtd::control::ControlSession;
+
 ControlSession::Private::Private( QLocalSocket * socket ):
 socket( socket ) {
 	this->connect( this->socket, SIGNAL( disconnected() ), SLOT( onDisconnected() ) );

@@ -4,6 +4,8 @@
 
 #include <cassert>
 
+using qbtd::control::ControlServer;
+
 std::unique_ptr< ControlServer, std::function< void ( ControlServer * ) > > ControlServer::Private::self;
 
 void ControlServer::Private::destory( ControlServer * data ) {

@@ -5,6 +5,9 @@
 
 #include <memory>
 
+namespace qbtd {
+namespace control {
+
 class ControlSession: public QObject {
 	Q_OBJECT
 public:
@@ -19,5 +22,8 @@ private:
 	class Private;
 	std::shared_ptr< Private > p_;
 };
+
+}
+}
 
 #endif

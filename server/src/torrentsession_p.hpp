@@ -5,6 +5,9 @@
 
 #include <libtorrent/session.hpp>
 
+namespace qbtd {
+namespace torrent {
+
 class TorrentSession::Private {
 public:
 	static void destory( TorrentSession * );
@@ -14,5 +17,8 @@ public:
 
 	libtorrent::session session_;
 };
+
+}
+}
 
 #endif

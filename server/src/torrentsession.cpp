@@ -3,6 +3,8 @@
 
 #include <QtCore/QtDebug>
 
+using qbtd::torrent::TorrentSession;
+
 std::unique_ptr< TorrentSession, std::function< void ( TorrentSession * ) > > TorrentSession::Private::self;
 
 void TorrentSession::Private::destory( TorrentSession * data ) {

@@ -6,5 +6,6 @@ project(QBTD)
 set(QBTD_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${QBTD_MODULE_PATH})
 
+add_subdirectory("core")
 add_subdirectory("server")
 add_subdirectory("client")
