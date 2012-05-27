@@ -13,7 +13,7 @@ Inspector::Inspector( const torrent_handle & th ): QObject(), th( th ) {
 }
 
 void Inspector::print() {
-	std::vector< long > fp;
+	std::vector< libtorrent::size_type > fp;
 	this->th.file_progress( fp, torrent_handle::piece_granularity );
 	int i = 0;
 	for( auto it = fp.begin(); it != fp.end(); ++it ) {
