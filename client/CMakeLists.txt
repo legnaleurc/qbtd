@@ -2,9 +2,9 @@ find_package(Qt4 REQUIRED QtNetwork)
 
 include(${QT_USE_FILE})
 
-set(QBTD_CLIENT_SOURCES "src/main.cpp" "src/widget/mainwindow.hpp" "src/widget/mainwindow_p.hpp" "src/widget/mainwindow.cpp")
+set(QBTD_CLIENT_SOURCES "src/main.cpp" "src/widget/mainwindow.hpp" "src/widget/mainwindow_p.hpp" "src/widget/mainwindow.cpp" "src/widget/serverdialog.hpp" "src/widget/serverdialog_p.hpp" "src/widget/serverdialog.cpp")
 
-qt4_wrap_ui(QBTD_CLIENT_UIC_HEADERS "src/widget/mainwindow.ui")
+qt4_wrap_ui(QBTD_CLIENT_UIC_HEADERS "src/widget/mainwindow.ui" "src/widget/serverdialog.ui")
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 

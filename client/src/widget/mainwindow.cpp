@@ -4,7 +4,8 @@ using qbtd::widget::MainWindow;
 
 MainWindow::Private::Private( MainWindow * host ):
 host( host ),
-ui() {
+ui(),
+serverDialog( new ServerDialog( host ) ) {
 	this->ui.setupUi( host );
 }
 

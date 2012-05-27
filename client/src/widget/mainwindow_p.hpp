@@ -3,6 +3,7 @@
 
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
+#include "serverdialog.hpp"
 
 namespace qbtd {
 namespace widget {
@@ -13,6 +14,7 @@ public:
 
 	MainWindow * host;
 	Ui::MainWindow ui;
+	ServerDialog * serverDialog;
 };
 
 }
