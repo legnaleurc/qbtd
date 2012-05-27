@@ -9,9 +9,10 @@ find_package(Boost REQUIRED system)
 find_package(LibtorrentRasterbar REQUIRED)
 
 include(${QT_USE_FILE})
-include_directories(${BOOST_INCLUDE_DIRS} ${LIBTORRENT_RASTERBAR_INCLUDE_DIRS})
+include(${LIBTORRENT_RASTERBAR_USE_FILE})
+include_directories(${BOOST_INCLUDE_DIRS})
 
-add_definitions("-DBOOST_FILESYSTEM_VERSION=2")
+#add_definitions("-DBOOST_FILESYSTEM_VERSION=2")
 
 set(QBTD_SOURCES "src/main.cpp" "src/inspector.hpp" "src/inspector.cpp" "src/torrentsession.hpp" "src/torrentsession_p.hpp" "src/torrentsession.cpp" "src/controlserver.hpp" "src/controlserver_p.hpp" "src/controlserver.cpp" "src/controlsession.hpp" "src/controlsession_p.hpp" "src/controlsession.cpp")
 
