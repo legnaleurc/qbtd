@@ -11,6 +11,7 @@ namespace control {
 class ControlSession: public QObject {
 	Q_OBJECT
 public:
+	ControlSession();
 	explicit ControlSession( QLocalSocket * socket );
 
 	void close();

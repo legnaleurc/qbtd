@@ -12,6 +12,8 @@ class ServerDialog: public QDialog {
 public:
 	explicit ServerDialog( QWidget * parent );
 
+	QString getLocalServerPath() const;
+
 private:
 	class Private;
 	std::shared_ptr< Private > p_;

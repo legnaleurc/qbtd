@@ -12,3 +12,7 @@ ServerDialog::ServerDialog( QWidget * parent ):
 QDialog( parent ),
 p_( new Private( this ) ) {
 }
+
+QString ServerDialog::getLocalServerPath() const {
+	return this->p_->ui.localServerPath->text();
+}

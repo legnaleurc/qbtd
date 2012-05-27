@@ -15,6 +15,10 @@ void ControlSession::Private::onDisconnected() {
 	emit this->disconnected();
 }
 
+ControlSession::ControlSession():
+p_( new Private( new QLocalSocket( this ) ) ) {
+}
+
 ControlSession::ControlSession( QLocalSocket * socket ):
 p_( new Private( socket ) ) {
 	this->connect( this->p_.get(), SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
