@@ -27,6 +27,8 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="action_Connect_To_Server"/>
+    <addaction name="separator"/>
     <addaction name="action_Upload_Torrent"/>
    </widget>
    <addaction name="menu_File"/>
@@ -35,6 +37,11 @@
   <action name="action_Upload_Torrent">
    <property name="text">
     <string>&amp;Upload Torrent</string>
+   </property>
+  </action>
+  <action name="action_Connect_To_Server">
+   <property name="text">
+    <string>&amp;Connect To Server</string>
    </property>
   </action>
  </widget>
