@@ -15,8 +15,10 @@ public:
 	explicit ControlSession( QLocalSocket * socket );
 
 	void close();
+	void connectToHost( const QString & path );
 
 signals:
+	void connected();
 	void disconnected();
 
 private:

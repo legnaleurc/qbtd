@@ -15,6 +15,7 @@ public slots:
 	void onDisconnected();
 
 signals:
+	void connected();
 	void disconnected();
 
 public:
