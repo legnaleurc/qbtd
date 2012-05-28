@@ -24,6 +24,7 @@ void MainWindow::Private::onConnectToServer() {
 }
 
 void MainWindow::Private::onConnected() {
+	// TODO activate operation
 }
 
 MainWindow::MainWindow():
