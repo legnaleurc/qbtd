@@ -1,13 +1,13 @@
 #include "mainwindow_p.hpp"
 
 using qbtd::widget::MainWindow;
-using qbtd::control::ControlSession;
+using qbtd::control::ClientSession;
 
 MainWindow::Private::Private( MainWindow * host ):
 host( host ),
 ui(),
 serverDialog( new ServerDialog( host ) ),
-session( new ControlSession ) {
+session( new ClientSession( this ) ) {
 	this->ui.setupUi( host );
 
 	this->connect( this->ui.action_Connect_To_Server, SIGNAL( triggered() ), SLOT( onConnectToServer() ) );
@@ -20,7 +20,7 @@ void MainWindow::Private::onConnectToServer() {
 	}
 	QString lsp = this->serverDialog->getLocalServerPath();
 	// TODO handle failure
-	this->session->connectToHost( lsp );
+	this->session->connectToServer( lsp );
 }
 
 void MainWindow::Private::onConnected() {

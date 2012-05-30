@@ -1,4 +1,5 @@
 #include "controlserver_p.hpp"
+#include "qbtd/serversession.hpp"
 
 #include <QtCore/QtDebug>
 
@@ -21,8 +22,7 @@ sessions() {
 
 void ControlServer::Private::onNewConnection() {
 	while( this->server.hasPendingConnections() ) {
-		QLocalSocket * socket = this->server.nextPendingConnection();
-		std::shared_ptr< ControlSession > session( new ControlSession( socket ), []( ControlSession * data )->void {
+		auto session = std::shared_ptr< ServerSession >( this->server.nextPendingConnection(), []( ServerSession * data )->void {
 			QMetaObject::invokeMethod( data, "deleteLater" );
 		} );
 		this->sessions.push_back( session );
@@ -30,7 +30,7 @@ void ControlServer::Private::onNewConnection() {
 }
 
 void ControlServer::Private::onSessionDisconnected() {
-	ControlSession * session = static_cast< ControlSession * >( this->sender() );
+	ServerSession * session = static_cast< ServerSession * >( this->sender() );
 	auto it = std::remove_if( this->sessions.begin(), this->sessions.end(), [session]( decltype( this->sessions[0] ) s )->bool {
 		return session == s.get();
 	} );
@@ -54,7 +54,6 @@ ControlServer & ControlServer::instance() {
 
 ControlServer::ControlServer():
 p_( new Private ) {
-	this->p_->server.listen( "qbtd" );
 }
 
 ControlServer::~ControlServer() {
@@ -64,4 +63,12 @@ ControlServer::~ControlServer() {
 	for( auto it = this->p_->sessions.begin(); it != this->p_->sessions.end(); ++it ) {
 		( *it )->close();
 	}
+}
+
+bool ControlServer::listen( const QString & path ) {
+	return this->p_->server.listen( path );
+}
+
+bool ControlServer::listen( const QHostAddress & address ) {
+	return false;
 }

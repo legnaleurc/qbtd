@@ -1,23 +1,22 @@
-#ifndef CONTROLSESSION_HPP_
-#define CONTROLSESSION_HPP_
+#ifndef QBTD_CONTROL_CLIENTSESSION_HPP_
+#define QBTD_CONTROL_CLIENTSESSION_HPP_
 
-#include "qbtd/controlsession.hpp"
+#include "qbtd/clientsession.hpp"
+#include "sessionsocket.hpp"
 
 #include <QtScript/QScriptEngine>
 
 namespace qbtd {
 namespace control {
 
-class ControlSession::Private: public QObject {
+class ClientSession::Private: public QObject {
 	Q_OBJECT
 public:
-	explicit Private( QLocalSocket * socket );
+	explicit Private();
 
 public slots:
 	void onConnected();
 	void onDisconnected();
-	void onHeaderReceived();
-	void onCommandReceived();
 
 signals:
 	void connected();
@@ -25,7 +24,7 @@ signals:
 	void received( const QString & header );
 
 public:
-	QLocalSocket * socket;
+	SessionSocket * socket;
 	QScriptEngine * engine;
 };
 

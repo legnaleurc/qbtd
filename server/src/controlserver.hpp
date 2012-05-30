@@ -1,5 +1,7 @@
-#ifndef CONTROLSERVER_HPP
-#define CONTROLSERVER_HPP
+#ifndef QBTD_CONTROL_CONTROLSERVER_HPP
+#define QBTD_CONTROL_CONTROLSERVER_HPP
+
+#include <QtNetwork/QHostAddress>
 
 #include <memory>
 
@@ -10,6 +12,9 @@ class ControlServer {
 public:
 	static void initialize();
 	static ControlServer & instance();
+
+	bool listen( const QString & path );
+	bool listen( const QHostAddress & address );
 
 private:
 	ControlServer();

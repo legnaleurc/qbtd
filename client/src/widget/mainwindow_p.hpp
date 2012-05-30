@@ -4,7 +4,7 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 #include "serverdialog.hpp"
-#include "qbtd/controlsession.hpp"
+#include "qbtd/clientsession.hpp"
 
 namespace qbtd {
 namespace widget {
@@ -22,7 +22,7 @@ public:
 	MainWindow * host;
 	Ui::MainWindow ui;
 	ServerDialog * serverDialog;
-	control::ControlSession * session;
+	control::ClientSession * session;
 };
 
 }

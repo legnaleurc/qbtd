@@ -20,6 +20,8 @@ int main( int argc, char * argv[] ) {
 	qbtd::torrent::TorrentSession::initialize();
 	qbtd::control::ControlServer::initialize();
 
+	qbtd::control::ControlServer::instance().listen( "qbtd" );
+
 	qbtd::torrent::TorrentSession::instance().addTorrent( QUrl::fromLocalFile( argv[1] ) );
 
 	return a.exec();
