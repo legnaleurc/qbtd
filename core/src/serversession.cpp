@@ -2,8 +2,6 @@
 #include "localsessionsocket.hpp"
 
 #include <QtCore/QTextStream>
-#include <QtCore/QTextCodec>
-#include <QtCore/QRegExp>
 
 using qbtd::control::ServerSession;
 using qbtd::control::SessionSocket;
@@ -12,7 +10,7 @@ ServerSession::Private::Private( SessionSocket * socket ):
 QObject(),
 socket( socket ),
 engine( new QScriptEngine( this ) ) {
-	this->connect( this->socket, SIGNAL( readyRead() ), SLOT( onHeaderReceived() ) );
+	this->connect( this->socket, SIGNAL( readyRead() ), SLOT( onSynReceived() ) );
 	this->connect( this->socket, SIGNAL( disconnected() ), SLOT( onDisconnected() ) );
 }
 
@@ -22,8 +20,8 @@ void ServerSession::Private::onDisconnected() {
 	emit this->disconnected();
 }
 
-void ServerSession::Private::onHeaderReceived() {
-	this->socket->disconnect( SIGNAL( readyRead() ), this, SLOT( onHeaderReceived() ) );
+void ServerSession::Private::onSynReceived() {
+	this->socket->disconnect( SIGNAL( readyRead() ), this, SLOT( onSynReceived() ) );
 	QTextStream sin( this->socket );
 	QString line = sin.readLine();
 	if( line != "=0" ) {
@@ -31,11 +29,11 @@ void ServerSession::Private::onHeaderReceived() {
 		this->socket->close();
 		return;
 	}
-	this->connect( this->socket, SIGNAL( readyRead() ), SLOT( onCommandReceived() ) );
+	this->connect( this->socket, SIGNAL( readyRead() ), SLOT( onRequested() ) );
 	// TODO set state to OK
 }
 
-void ServerSession::Private::onCommandReceived() {
+void ServerSession::Private::onRequested() {
 	QTextStream sin( this->socket );
 	QString line = sin.readLine();
 
@@ -45,18 +43,35 @@ void ServerSession::Private::onCommandReceived() {
 	this->engine->globalObject().setProperty( "tmp", this->engine->nullValue() );
 	QVariantMap map = v.toVariant().toMap();
 
-	// TODO determine this is a request or response
+	QString command = map.value( "command" ).toString();
+	QVariant args = map.value( "args" );
+	emit this->requested( command, args );
 }
 
 ServerSession::ServerSession( QLocalSocket * socket, QObject * parent ):
 QObject( parent ),
 p_( new Private( new LocalSessionSocket( socket ) ) ) {
+	this->connect( this->p_.get(), SIGNAL( requested() ), SIGNAL( requested() ) );
 }
 
 ServerSession::ServerSession( QTcpSocket * socket, QObject * parent ):
 QObject( parent ),
 p_( new Private( nullptr ) ) {
+	this->connect( this->p_.get(), SIGNAL( requested() ), SIGNAL( requested() ) );
 }
 
 void ServerSession::close() {
+	this->p_->socket->close();
+}
+
+void ServerSession::response( bool result, const QVariant & data ) {
+	QVariantMap package;
+	package.insert( "result", result );
+	package.insert( "data", data );
+
+	this->p_->engine->globalObject().setProperty( "tmp", this->p_->engine->newVariant( package ) );
+	QString json = this->p_->engine->evaluate( "JSON.stringify( tmp );" ).toString();
+	this->p_->engine->globalObject().setProperty( "tmp", this->p_->engine->nullValue() );
+
+	this->p_->socket->write( json.toUtf8().toBase64().append( "\n" ) );
 }

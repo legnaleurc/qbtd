@@ -10,11 +10,16 @@ namespace qbtd {
 namespace control {
 
 class ServerSession: public QObject {
+	Q_OBJECT
 public:
 	ServerSession( QLocalSocket * socket, QObject * parent );
 	ServerSession( QTcpSocket * socket, QObject * parent );
 
 	void close();
+	void response( bool result, const QVariant & data );
+
+signals:
+	void requested();
 
 private:
 	class Private;

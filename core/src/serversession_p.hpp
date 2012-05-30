@@ -16,11 +16,12 @@ public:
 
 public slots:
 	void onDisconnected();
-	void onHeaderReceived();
-	void onCommandReceived();
+	void onSynReceived();
+	void onRequested();
 
 signals:
 	void disconnected();
+	void requested( const QString & command, const QVariant & args );
 
 public:
 	SessionSocket * socket;
