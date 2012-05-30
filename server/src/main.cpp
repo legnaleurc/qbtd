@@ -17,10 +17,10 @@ int main( int argc, char * argv[] ) {
 
 	QCoreApplication a( argc, argv );
 
-	TorrentSession::initialize();
-	ControlServer::initialize();
+	qbtd::torrent::TorrentSession::initialize();
+	qbtd::control::ControlServer::initialize();
 
-	TorrentSession::instance().addTorrent( QUrl::fromLocalFile( argv[1] ) );
+	qbtd::torrent::TorrentSession::instance().addTorrent( QUrl::fromLocalFile( argv[1] ) );
 
 	return a.exec();
 }

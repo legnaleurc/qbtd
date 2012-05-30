@@ -2,9 +2,12 @@
 #define CONTROLSERVER_HPP_
 
 #include "controlserver.hpp"
-#include "controlsession.hpp"
+#include "qbtd/controlsession.hpp"
 
 #include <QtNetwork/QLocalServer>
+
+namespace qbtd {
+namespace control {
 
 class ControlServer::Private : public QObject {
 	Q_OBJECT
@@ -22,5 +25,8 @@ public:
 	QLocalServer server;
 	std::vector< std::shared_ptr< ControlSession > > sessions;
 };
+
+}
+}
 
 #endif

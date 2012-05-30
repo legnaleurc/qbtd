@@ -1,7 +1,10 @@
 #ifndef CONTROLSESSION_HPP_
 #define CONTROLSESSION_HPP_
 
-#include "controlsession.hpp"
+#include "qbtd/controlsession.hpp"
+
+namespace qbtd {
+namespace control {
 
 class ControlSession::Private: public QObject {
 	Q_OBJECT
@@ -17,5 +20,8 @@ signals:
 public:
 	QLocalSocket * socket;
 };
+
+}
+}
 
 #endif

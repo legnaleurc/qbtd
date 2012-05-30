@@ -5,6 +5,9 @@
 
 #include <memory>
 
+namespace qbtd {
+namespace torrent {
+
 class TorrentSession {
 public:
 	static void initialize();
@@ -21,5 +24,8 @@ private:
 	friend class Private;
 	std::shared_ptr< Private > p_;
 };
+
+}
+}
 
 #endif

@@ -3,6 +3,9 @@
 
 #include <memory>
 
+namespace qbtd {
+namespace control {
+
 class ControlServer {
 public:
 	static void initialize();
@@ -17,5 +20,8 @@ private:
 	friend class Private;
 	std::shared_ptr< Private > p_;
 };
+
+}
+}
 
 #endif

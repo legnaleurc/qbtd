@@ -2,6 +2,8 @@
 
 #include <QtNetwork/QLocalSocket>
 
+using qbtd::control::ControlSession;
+
 ControlSession::Private::Private( QLocalSocket * socket ):
 socket( socket ) {
 	this->connect( this->socket, SIGNAL( disconnected() ), SLOT( onDisconnected() ) );
@@ -11,6 +13,10 @@ void ControlSession::Private::onDisconnected() {
 	QMetaObject::invokeMethod( this->socket, "deleteLater" );
 
 	emit this->disconnected();
+}
+
+ControlSession::ControlSession():
+p_( new Private( new QLocalSocket( this ) ) ) {
 }
 
 ControlSession::ControlSession( QLocalSocket * socket ):
