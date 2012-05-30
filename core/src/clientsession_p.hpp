@@ -12,16 +12,18 @@ namespace control {
 class ClientSession::Private: public QObject {
 	Q_OBJECT
 public:
-	explicit Private();
+	Private();
 
 public slots:
 	void onConnected();
 	void onDisconnected();
+	void onAckReceived();
+	void onResponse();
 
 signals:
 	void connected();
 	void disconnected();
-	void received( const QString & header );
+	void responsed( bool result, const QVariant & data );
 
 public:
 	SessionSocket * socket;

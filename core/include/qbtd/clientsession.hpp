@@ -15,10 +15,12 @@ public:
 
 	void close();
 	void connectToServer( const QString & path );
+	void request( const QString & command, const QVariant & args );
 
 signals:
 	void connected();
 	void disconnected();
+	void responsed( bool result, const QVariant & data );
 
 private:
 	class Private;
