@@ -3,6 +3,7 @@
 
 #include <QtCore/QEventLoop>
 #include <QtCore/QTimer>
+#include <QtCore/QFile>
 
 #include <cassert>
 
@@ -69,6 +70,12 @@ bool SessionServer::isListening() const {
 bool SessionServer::listen( const QString & name ) {
 	auto server = std::make_shared< QLocalServer >();
 	bool listened = server->listen( name );
+
+	if( server->serverError() == QAbstractSocket::AddressInUseError ) {
+		// cleanup previous garbage
+		QFile::remove( server->fullServerName() );
+		listened = server->listen( name );
+	}
 	if( listened ) {
 		this->p_->connect( server.get(), SIGNAL( newConnection() ), SLOT( onNewLocalConnection() ) );
 		this->p_->localServers.push_back( server );
