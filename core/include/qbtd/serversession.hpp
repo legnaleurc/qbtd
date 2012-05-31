@@ -19,7 +19,7 @@ public:
 	void response( bool result, const QVariant & data );
 
 signals:
-	void requested();
+	void requested( const QString & command, const QVariant & args );
 
 private:
 	class Private;

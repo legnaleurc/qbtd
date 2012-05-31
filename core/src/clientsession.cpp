@@ -65,8 +65,8 @@ void ClientSession::close() {
 
 void ClientSession::connectToServer( const QString & path ) {
 	this->p_->socket = new LocalSessionSocket( path, this );
-	this->p_->connect( this->p_->socket, SIGNAL( connected() ), SLOT( onConnected() ) );
-	this->p_->connect( this->p_->socket, SIGNAL( disconnected() ), SLOT( onDisconnected() ) );
+	this->p_->connect( this->p_->socket, SIGNAL( opened() ), SLOT( onConnected() ) );
+	this->p_->connect( this->p_->socket, SIGNAL( closed() ), SLOT( onDisconnected() ) );
 	this->p_->socket->open( QIODevice::ReadWrite );
 }
 

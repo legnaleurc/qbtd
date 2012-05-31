@@ -11,7 +11,7 @@ QObject(),
 socket( socket ),
 engine( new QScriptEngine( this ) ) {
 	this->connect( this->socket, SIGNAL( readyRead() ), SLOT( onSynReceived() ) );
-	this->connect( this->socket, SIGNAL( disconnected() ), SLOT( onDisconnected() ) );
+	this->connect( this->socket, SIGNAL( closed() ), SLOT( onDisconnected() ) );
 }
 
 void ServerSession::Private::onDisconnected() {
@@ -51,13 +51,13 @@ void ServerSession::Private::onRequested() {
 ServerSession::ServerSession( QLocalSocket * socket, QObject * parent ):
 QObject( parent ),
 p_( new Private( new LocalSessionSocket( socket ) ) ) {
-	this->connect( this->p_.get(), SIGNAL( requested() ), SIGNAL( requested() ) );
+	this->connect( this->p_.get(), SIGNAL( requested( const QString &, const QVariant & ) ), SIGNAL( requested( const QString &, const QVariant & ) ) );
 }
 
 ServerSession::ServerSession( QTcpSocket * socket, QObject * parent ):
 QObject( parent ),
 p_( new Private( nullptr ) ) {
-	this->connect( this->p_.get(), SIGNAL( requested() ), SIGNAL( requested() ) );
+	this->connect( this->p_.get(), SIGNAL( requested( const QString &, const QVariant & ) ), SIGNAL( requested( const QString &, const QVariant & ) ) );
 }
 
 void ServerSession::close() {

@@ -20,7 +20,9 @@ int main( int argc, char * argv[] ) {
 	qbtd::torrent::TorrentSession::initialize();
 	qbtd::control::ControlServer::initialize();
 
-	qbtd::control::ControlServer::instance().listen( "qbtd" );
+	if( !qbtd::control::ControlServer::instance().listen( "/tmp/qbtd.socket" ) ) {
+		a.exit( 1 );
+	}
 
 	return a.exec();
 }

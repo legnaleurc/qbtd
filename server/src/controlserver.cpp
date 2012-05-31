@@ -22,6 +22,7 @@ sessions() {
 void ControlServer::Private::onNewConnection() {
 	while( this->server.hasPendingConnections() ) {
 		ControlSession * session = new ControlSession( this->server.nextPendingConnection(), this );
+		this->connect( session, SIGNAL( disconnected() ), SLOT( onSessionDisconnected() ) );
 		this->sessions.push_back( session );
 	}
 }
