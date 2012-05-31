@@ -11,8 +11,8 @@ namespace control {
 class LocalSessionSocket::Private : public QObject {
 	Q_OBJECT
 public:
-	explicit Private( QLocalSocket * socket );
-	explicit Private( const QString & path );
+	Private( QLocalSocket * socket, LocalSessionSocket * host );
+	Private( const QString & path, LocalSessionSocket * host );
 
 public slots:
 	void onError( QLocalSocket::LocalSocketError socketError );
@@ -21,6 +21,9 @@ signals:
 	void error( bool stop, const QString & message );
 
 public:
+	void initialize();
+
+	LocalSessionSocket * host;
 	QLocalSocket * socket;
 	QString path;
 };

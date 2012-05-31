@@ -2,16 +2,30 @@
 
 using qbtd::control::LocalSessionSocket;
 
-LocalSessionSocket::Private::Private( QLocalSocket * socket ):
+LocalSessionSocket::Private::Private( QLocalSocket * socket, LocalSessionSocket * host ):
+host( host ),
 socket( socket ),
 path( socket->fullServerName() ) {
-	this->connect( socket, SIGNAL( error( QLocalSocket::LocalSocketError ) ), SLOT( onError( QLocalSocket::LocalSocketError ) ) );
+	this->initialize();
 }
 
-LocalSessionSocket::Private::Private( const QString & path ):
+LocalSessionSocket::Private::Private( const QString & path, LocalSessionSocket * host ):
+host( host ),
 socket( new QLocalSocket( this ) ),
 path( path ) {
+	this->initialize();
+}
+
+void LocalSessionSocket::Private::initialize() {
 	this->connect( socket, SIGNAL( error( QLocalSocket::LocalSocketError ) ), SLOT( onError( QLocalSocket::LocalSocketError ) ) );
+
+	this->host->connect( this, SIGNAL( error( bool, const QString & ) ), SIGNAL( error( bool, const QString & ) ) );
+	this->host->connect( this->socket, SIGNAL( connected() ), SIGNAL( opened() ) );
+	this->host->connect( this->socket, SIGNAL( disconnected() ), SIGNAL( closed() ) );
+	this->host->connect( this->socket, SIGNAL( aboutToClose() ), SIGNAL( aboutToClose() ) );
+	this->host->connect( this->socket, SIGNAL( bytesWritten( qint64 ) ), SIGNAL( bytesWritten( qint64 ) ) );
+	this->host->connect( this->socket, SIGNAL( readChannelFinished() ), SIGNAL( readChannelFinished() ) );
+	this->host->connect( this->socket, SIGNAL( readyRead() ), SIGNAL( readyRead() ) );
 }
 
 void LocalSessionSocket::Private::onError( QLocalSocket::LocalSocketError socketError ) {
@@ -20,14 +34,32 @@ void LocalSessionSocket::Private::onError( QLocalSocket::LocalSocketError socket
 
 LocalSessionSocket::LocalSessionSocket( QLocalSocket * socket, QObject * parent ):
 SessionSocket( parent ),
-p_( new Private( socket ) ) {
-	this->connect( this->p_.get(), SIGNAL( error( bool, const QString & ) ), SIGNAL( error( bool, const QString & ) ) );
+p_( new Private( socket, this ) ) {
 }
 
 LocalSessionSocket::LocalSessionSocket( const QString & path, QObject * parent ):
 SessionSocket( parent ),
-p_( new Private( path ) ) {
-	this->connect( this->p_.get(), SIGNAL( error( bool, const QString & ) ), SIGNAL( error( bool, const QString & ) ) );
+p_( new Private( path, this ) ) {
+}
+
+bool LocalSessionSocket::canReadLine() const {
+	return this->QIODevice::canReadLine() || this->p_->socket->canReadLine();
+}
+
+void LocalSessionSocket::close() {
+	this->p_->socket->disconnectFromServer();
+}
+
+bool LocalSessionSocket::isSequential() const {
+	return this->p_->socket->isSequential();
+}
+
+bool LocalSessionSocket::open( OpenMode mode ) {
+	if( mode != QIODevice::ReadWrite ) {
+		return false;
+	}
+	this->p_->socket->connectToServer( this->p_->path, mode );
+	return this->QIODevice::open( mode );
 }
 
 qint64 LocalSessionSocket::readData( char * data, qint64 maxSize ) {
