@@ -8,7 +8,8 @@ using qbtd::control::ControlSession;
 ControlSession::Private::Private( ServerSession * session, ControlSession * host ):
 host( host ),
 session( session ) {
-	this->host->connect( this, SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
+	this->session->setParent( this );
+	this->host->connect( this->session, SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
 	this->connect( this->session, SIGNAL( requested( const QString &, const QVariant & ) ), SLOT( onRequested( const QString &, const QVariant & ) ) );
 }
 

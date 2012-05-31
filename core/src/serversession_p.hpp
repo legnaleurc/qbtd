@@ -12,10 +12,9 @@ namespace control {
 class ServerSession::Private: public QObject {
 	Q_OBJECT
 public:
-	Private( SessionSocket * socket );
+	Private( SessionSocket * socket, ServerSession * host );
 
 public slots:
-	void onDisconnected();
 	void onSynReceived();
 	void onRequested();
 
@@ -24,6 +23,7 @@ signals:
 	void requested( const QString & command, const QVariant & args );
 
 public:
+	ServerSession * host;
 	SessionSocket * socket;
 	QScriptEngine * engine;
 };

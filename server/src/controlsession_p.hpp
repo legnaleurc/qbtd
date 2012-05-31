@@ -15,9 +15,6 @@ public:
 public slots:
 	void onRequested( const QString & command, const QVariant & args );
 
-signals:
-	void disconnected();
-
 public:
 	ControlSession * host;
 	ServerSession * session;

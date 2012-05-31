@@ -6,6 +6,7 @@ LocalSessionSocket::Private::Private( QLocalSocket * socket, LocalSessionSocket 
 host( host ),
 socket( socket ),
 path( socket->fullServerName() ) {
+	this->socket->setParent( this );
 	this->initialize();
 }
 
