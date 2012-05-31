@@ -13,7 +13,6 @@ void ControlServer::Private::destory( ControlServer * data ) {
 	delete data;
 }
 
-// TODO local socket, ipv4, ipv6 version
 ControlServer::Private::Private():
 server(),
 sessions() {
@@ -22,17 +21,19 @@ sessions() {
 
 void ControlServer::Private::onNewConnection() {
 	while( this->server.hasPendingConnections() ) {
-		auto session = std::shared_ptr< ServerSession >( this->server.nextPendingConnection(), []( ServerSession * data )->void {
-			QMetaObject::invokeMethod( data, "deleteLater" );
-		} );
+		ControlSession * session = new ControlSession( this->server.nextPendingConnection(), this );
 		this->sessions.push_back( session );
 	}
 }
 
 void ControlServer::Private::onSessionDisconnected() {
-	ServerSession * session = static_cast< ServerSession * >( this->sender() );
-	auto it = std::remove_if( this->sessions.begin(), this->sessions.end(), [session]( decltype( this->sessions[0] ) s )->bool {
-		return session == s.get();
+	ControlSession * session = static_cast< ControlSession * >( this->sender() );
+	assert( session != nullptr || !"ControlSession casting failed" );
+	auto it = std::remove_if( this->sessions.begin(), this->sessions.end(), [session]( ControlSession * s )->bool {
+		return session == s;
+	} );
+	std::for_each( it, this->sessions.end(), []( ControlSession * s )->void {
+		s->deleteLater();
 	} );
 	this->sessions.erase( it, this->sessions.end() );
 }

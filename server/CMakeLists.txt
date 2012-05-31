@@ -6,9 +6,9 @@ include(${QT_USE_FILE})
 include(${LIBTORRENT_RASTERBAR_USE_FILE})
 include_directories(${BOOST_INCLUDE_DIRS} "${CMAKE_SOURCE_DIR}/core/include")
 
-set(QBTD_SERVER_SOURCES "src/main.cpp" "src/inspector.hpp" "src/inspector.cpp" "src/torrentsession.hpp" "src/torrentsession_p.hpp" "src/torrentsession.cpp" "src/controlserver.hpp" "src/controlserver_p.hpp" "src/controlserver.cpp")
+set(QBTD_SERVER_SOURCES "src/main.cpp" "src/inspector.hpp" "src/inspector.cpp" "src/torrentsession.hpp" "src/torrentsession_p.hpp" "src/torrentsession.cpp" "src/controlserver.hpp" "src/controlserver_p.hpp" "src/controlserver.cpp" "src/controlsession.hpp" "src/controlsession_p.hpp" "src/controlsession.cpp")
 
-qt4_wrap_cpp(QBTD_SERVER_MOC_SOURCES "src/inspector.hpp" "src/controlserver_p.hpp")
+qt4_wrap_cpp(QBTD_SERVER_MOC_SOURCES "src/inspector.hpp" "src/controlserver_p.hpp" "src/controlsession.hpp" "src/controlsession_p.hpp")
 
 add_executable(qbtd-server ${QBTD_SERVER_SOURCES} ${QBTD_SERVER_MOC_SOURCES})
 add_dependencies(qbtd-server qbtd-core)

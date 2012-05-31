@@ -3,6 +3,7 @@
 
 #include "controlserver.hpp"
 #include "qbtd/sessionserver.hpp"
+#include "controlsession.hpp"
 
 #include <QtNetwork/QLocalServer>
 
@@ -23,7 +24,7 @@ public slots:
 
 public:
 	SessionServer server;
-	std::vector< std::shared_ptr< ServerSession > > sessions;
+	std::vector< ControlSession * > sessions;
 };
 
 }
