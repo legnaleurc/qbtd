@@ -12,8 +12,6 @@ engine( new QScriptEngine( this ) ) {
 }
 
 void ClientSession::Private::onDisconnected() {
-	QMetaObject::invokeMethod( this->socket, "deleteLater" );
-
 	emit this->disconnected();
 }
 
@@ -34,6 +32,7 @@ void ClientSession::Private::onAckReceived() {
 		return;
 	}
 	this->connect( this->socket, SIGNAL( readyRead() ), SLOT( onResponse() ) );
+	emit this->connected();
 }
 
 void ClientSession::Private::onResponse() {
@@ -54,6 +53,8 @@ void ClientSession::Private::onResponse() {
 ClientSession::ClientSession( QObject * parent ):
 QObject( parent ),
 p_( new Private ) {
+	this->connect( this->p_.get(), SIGNAL( connected() ), SIGNAL( connected() ) );
+	this->connect( this->p_.get(), SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
 	this->connect( this->p_.get(), SIGNAL( responsed( bool, const QVariant & ) ), SIGNAL( responsed( bool, const QVariant & ) ) );
 }
 

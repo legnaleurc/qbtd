@@ -17,6 +17,7 @@ public:
 public slots:
 	void onConnectToServer();
 	void onConnected();
+	void onResponsed( bool result, const QVariant & data );
 
 public:
 	MainWindow * host;

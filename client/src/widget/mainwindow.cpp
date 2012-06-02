@@ -1,5 +1,7 @@
 #include "mainwindow_p.hpp"
 
+#include <QtCore/QtDebug>
+
 using qbtd::widget::MainWindow;
 using qbtd::control::ClientSession;
 
@@ -24,7 +26,12 @@ void MainWindow::Private::onConnectToServer() {
 }
 
 void MainWindow::Private::onConnected() {
-	// TODO activate operation
+	this->connect( this->session, SIGNAL( responsed( bool, const QVariant & ) ), SLOT( onResponsed( bool, const QVariant & ) ) );
+	this->session->request( "add", QVariant() );
+}
+
+void MainWindow::Private::onResponsed( bool result, const QVariant & data ) {
+	qDebug() << __PRETTY_FUNCTION__ << result << data;
 }
 
 MainWindow::MainWindow():
