@@ -8,6 +8,7 @@ socket( socket ),
 path( socket->fullServerName() ) {
 	this->socket->setParent( this );
 	this->initialize();
+	this->host->QIODevice::open( QIODevice::ReadWrite );
 }
 
 LocalSessionSocket::Private::Private( const QString & path, LocalSessionSocket * host ):
@@ -30,6 +31,7 @@ void LocalSessionSocket::Private::initialize() {
 }
 
 void LocalSessionSocket::Private::onError( QLocalSocket::LocalSocketError socketError ) {
+	this->host->setErrorString( this->socket->errorString() );
 	emit this->error( true, this->socket->errorString() );
 }
 
@@ -59,8 +61,9 @@ bool LocalSessionSocket::open( OpenMode mode ) {
 	if( mode != QIODevice::ReadWrite ) {
 		return false;
 	}
+	bool opened = this->QIODevice::open( mode );
 	this->p_->socket->connectToServer( this->p_->path, mode );
-	return this->QIODevice::open( mode );
+	return opened;
 }
 
 qint64 LocalSessionSocket::readData( char * data, qint64 maxSize ) {

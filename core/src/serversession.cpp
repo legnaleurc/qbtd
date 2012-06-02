@@ -25,6 +25,7 @@ void ServerSession::Private::onSynReceived() {
 		return;
 	}
 	this->connect( this->socket, SIGNAL( readyRead() ), SLOT( onRequested() ) );
+	this->socket->write( "=0\n" );
 	// TODO set state to OK
 }
 
