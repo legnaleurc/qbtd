@@ -8,3 +8,5 @@
       <link rel="stylesheet" href="<?php echo base_url(); ?>/css/prim.css" type="text/css" charset="utf-8">
    </head>
    <body>
+
+   <div  class="container">
