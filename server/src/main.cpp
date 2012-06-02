@@ -2,6 +2,7 @@
 
 #include "torrentsession.hpp"
 #include "controlserver.hpp"
+#include "commandhandler.hpp"
 
 #include <csignal>
 
@@ -18,6 +19,7 @@ int main( int argc, char * argv[] ) {
 	QCoreApplication a( argc, argv );
 
 	qbtd::torrent::TorrentSession::initialize();
+	qbtd::control::CommandHandler::initialize();
 	qbtd::control::ControlServer::initialize();
 
 	if( !qbtd::control::ControlServer::instance().listen( "/tmp/qbtd.socket" ) ) {

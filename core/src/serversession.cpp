@@ -1,5 +1,6 @@
 #include "serversession_p.hpp"
 #include "localsessionsocket.hpp"
+#include "json.hpp"
 
 #include <QtCore/QTextStream>
 
@@ -34,10 +35,7 @@ void ServerSession::Private::onRequested() {
 	QString line = sin.readLine();
 
 	QString json = QString::fromUtf8( QByteArray::fromBase64( line.toUtf8() ) );
-	this->engine->globalObject().setProperty( "tmp", json );
-	QScriptValue v = this->engine->evaluate( "JSON.parse( tmp );" );
-	this->engine->globalObject().setProperty( "tmp", this->engine->nullValue() );
-	QVariantMap map = v.toVariant().toMap();
+	QVariantMap map = utility::fromJSON( json, this->engine ).toMap();
 
 	QString command = map.value( "command" ).toString();
 	QVariant args = map.value( "args" );
@@ -65,9 +63,7 @@ void ServerSession::response( bool result, const QVariant & data ) {
 	package.insert( "result", result );
 	package.insert( "data", data );
 
-	this->p_->engine->globalObject().setProperty( "tmp", this->p_->engine->newVariant( package ) );
-	QString json = this->p_->engine->evaluate( "JSON.stringify( tmp );" ).toString();
-	this->p_->engine->globalObject().setProperty( "tmp", this->p_->engine->nullValue() );
+	QString json = utility::toJSON( package, this->p_->engine );
 
 	this->p_->socket->write( json.toUtf8().toBase64().append( "\n" ) );
 }

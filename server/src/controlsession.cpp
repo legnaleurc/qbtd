@@ -1,5 +1,6 @@
 #include "controlsession_p.hpp"
 #include "qbtd/serversession.hpp"
+#include "commandhandler.hpp"
 
 #include <QtCore/QtDebug>
 
@@ -19,7 +20,8 @@ ControlSession::Private::~Private() {
 
 void ControlSession::Private::onRequested( const QString & command, const QVariant & args ) {
 	qDebug() << command << args;
-	this->session->response( false, QVariant() );
+	auto response = CommandHandler::instance().execute( command, args );
+	this->session->response( response.first, response.second );
 }
 
 ControlSession::ControlSession( ServerSession * session, QObject * parent ):

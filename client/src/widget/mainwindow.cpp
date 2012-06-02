@@ -1,5 +1,7 @@
 #include "mainwindow_p.hpp"
 
+#include <QtCore/QUrl>
+
 #include <QtCore/QtDebug>
 
 using qbtd::widget::MainWindow;
@@ -27,7 +29,7 @@ void MainWindow::Private::onConnectToServer() {
 
 void MainWindow::Private::onConnected() {
 	this->connect( this->session, SIGNAL( responsed( bool, const QVariant & ) ), SLOT( onResponsed( bool, const QVariant & ) ) );
-	this->session->request( "add", QVariant() );
+	this->session->request( "add", QUrl::fromLocalFile( "/tmp/test.torrent" ) );
 }
 
 void MainWindow::Private::onResponsed( bool result, const QVariant & data ) {
