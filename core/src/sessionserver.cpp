@@ -73,7 +73,7 @@ bool SessionServer::listen( const QString & name ) {
 
 	if( server->serverError() == QAbstractSocket::AddressInUseError ) {
 		// cleanup previous garbage
-		QFile::remove( server->fullServerName() );
+		QFile::remove( name );
 		listened = server->listen( name );
 	}
 	if( listened ) {
