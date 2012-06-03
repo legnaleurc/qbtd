@@ -19,8 +19,12 @@ commands() {
 
 std::pair< bool, QVariant > CommandHandler::Private::add( const QVariant & args ) {
 	QUrl url = args.toUrl();
-	TorrentSession::instance().addTorrent( url );
-	return std::make_pair( true, QVariant() );
+	try {
+		TorrentSession::instance().addTorrent( url );
+		return std::make_pair( true, QVariant() );
+	} catch( std::exception & e ) {
+		return std::make_pair( false, QVariant( QString::fromUtf8( e.what() ) ) );
+	}
 }
 
 void CommandHandler::initialize() {
