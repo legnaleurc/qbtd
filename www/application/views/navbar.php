@@ -2,12 +2,10 @@
    <div class="navbar-inner">
       <div class="container">
          <a class="brand" href="#">Qbtd</a>
-         <div class="nav-collapse">
-            <ul class="nav" >
+            <ul class="nav pull-right" >
                <li><a href="#reg">Regieter</a></li>
                <li><a href="#login">Login</a></li>
             </ul>
-         </div>
       </div>
    </div>
 </div>
