@@ -4,7 +4,10 @@ class User extends CI_Controller {
 
 	public function index()
 	{
-      $this->load->view('user/index');
+      $data = array(
+         'page_title' => 'Login'
+      );
+      $this->load->view('user/index', $data);
 	}
 
    public function login()
