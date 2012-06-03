@@ -7,19 +7,34 @@
       <h2>Login</h2>
       <form class="well" action="" method="post" accept-charset="utf-8">
          <label>Username: </label>
-         <input class="span3 input-xlarge" type="text" name="id" placeholder="longin id">
+         <input class="span3 " type="text" name="id" placeholder="longin id">
          
          <label>Password: </label>
          <input class="span3" type="password" name="password" placeholder="your password">
 
-         <button class="btn" type="submit">Login</button>
-         <p><a href="">Forget Password ?</a></p>
+         <p><button class="btn" type="submit">Login</button>
+         <a href="">Forget Password ?</a></p>
       </form>
    </div>
 
 
    <div class="span6">
       <h2>Register</h2>
+      <form class="well" action="" method="post" accept-charset="utf-8">
+         <label for="username">Username: </label>
+         <input type="text" name="id" value="" id="username">
+
+         <label for="email">Email</label>
+         <input class="input-smail" type="text" name="email" value="" id="email">
+
+         <label for="password">Password: </label>
+         <input type="password" name="password" value="" id="password">
+
+         <label for="ConfirmPassword">Confirm Password:</label>
+         <input type="password" name="password2" value="" id="password2">
+      
+      <p><button class="btn" type=submit">Register</button></p>
+      </form>
    </div>
 
 </div>
