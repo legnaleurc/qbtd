@@ -63,7 +63,10 @@ ControlServer::~ControlServer() {
 	this->p_->server.close();
 	// disconnect all session
 	for( auto it = this->p_->sessions.begin(); it != this->p_->sessions.end(); ++it ) {
+		// NOTE this slot will modify this->p_->sessions, so this **MUST** disconnect first
+		( *it )->disconnect( SIGNAL( disconnected() ), this->p_.get(), SLOT( onSessionDisconnected() ) );
 		( *it )->close();
+		( *it )->deleteLater();
 	}
 }
 
