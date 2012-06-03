@@ -15,6 +15,7 @@ int main( int argc, char * argv[] ) {
 	signal( SIGINT, cleanup );
 	signal( SIGTERM, cleanup );
 	signal( SIGQUIT, cleanup );
+	signal( SIGABRT, cleanup );
 
 	QCoreApplication a( argc, argv );
 
