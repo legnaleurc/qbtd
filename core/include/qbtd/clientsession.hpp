@@ -20,6 +20,7 @@ public:
 signals:
 	void connected();
 	void disconnected();
+	void error( bool stop, const QString & message );
 	void responsed( bool result, const QVariant & data );
 
 private:

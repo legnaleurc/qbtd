@@ -17,6 +17,7 @@ public:
 public slots:
 	void onConnectToServer();
 	void onConnected();
+	void onError( bool stop, const QString & message );
 	void onResponsed( bool result, const QVariant & data );
 
 public:
