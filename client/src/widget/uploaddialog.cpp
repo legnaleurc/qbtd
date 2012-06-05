@@ -21,7 +21,7 @@ p_( new Private( this ) ) {
 }
 
 bool UploadDialog::isRemote() const {
-	return this->p_->ui.fromLocal->isChecked();
+	return this->p_->ui.fromURL->isChecked();
 }
 
 QByteArray UploadDialog::getLocalFile() const {
