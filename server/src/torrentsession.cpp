@@ -39,12 +39,18 @@ p_( new Private ) {
 TorrentSession::~TorrentSession() {
 }
 
-void TorrentSession::addTorrent( const QUrl & url ) {
+void TorrentSession::addTorrent( const QByteArray & data ) {
+	libtorrent::lazy_entry e;
+	int ret = libtorrent::lazy_bdecode( data.data(), data.data() + data.size(), e );
+	if( ret != 0 ) {
+		// TODO throw exception
+		return;
+	}
 	libtorrent::add_torrent_params p;
 	// TODO read from configure
 	p.save_path = "/tmp";
 	// TODO maybe network url
-	p.ti = new libtorrent::torrent_info( url.toLocalFile().toStdWString() );
+	p.ti = new libtorrent::torrent_info( e );
 	libtorrent::torrent_handle th = this->p_->session_.add_torrent( p );
 	Inspector * inspector = new Inspector( th );
 	inspector->connect( inspector, SIGNAL( finished() ), SLOT( deleteLater() ) );

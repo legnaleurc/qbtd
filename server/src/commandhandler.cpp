@@ -18,9 +18,9 @@ commands() {
 }
 
 std::pair< bool, QVariant > CommandHandler::Private::add( const QVariant & args ) {
-	QUrl url = args.toUrl();
+	QByteArray data = QByteArray::fromBase64( args.toByteArray() );
 	try {
-		TorrentSession::instance().addTorrent( url );
+		TorrentSession::instance().addTorrent( data );
 		return std::make_pair( true, QVariant() );
 	} catch( std::exception & e ) {
 		return std::make_pair( false, QVariant( QString::fromUtf8( e.what() ) ) );

@@ -1,7 +1,7 @@
 #ifndef TORRENTSESSION_HPP
 #define TORRENTSESSION_HPP
 
-#include <QtCore/QUrl>
+#include <QtCore/QByteArray>
 
 #include <memory>
 
@@ -13,7 +13,7 @@ public:
 	static void initialize();
 	static TorrentSession & instance();
 
-	void addTorrent( const QUrl & url );
+	void addTorrent( const QByteArray & data );
 
 private:
 	TorrentSession();
