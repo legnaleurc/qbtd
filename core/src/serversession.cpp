@@ -31,6 +31,9 @@ void ServerSession::Private::onSynReceived() {
 }
 
 void ServerSession::Private::onRequested() {
+	if( !this->socket->canReadLine() ) {
+		return;
+	}
 	QTextStream sin( this->socket );
 	QString line = sin.readLine();
 

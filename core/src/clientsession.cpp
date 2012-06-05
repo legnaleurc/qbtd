@@ -37,6 +37,9 @@ void ClientSession::Private::onAckReceived() {
 }
 
 void ClientSession::Private::onResponse() {
+	if( !this->socket->canReadLine() ) {
+		return;
+	}
 	QTextStream sin( this->socket );
 	QString line = sin.readLine();
 	line = QString::fromUtf8( QByteArray::fromBase64( line.toUtf8() ) );
