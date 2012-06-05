@@ -42,7 +42,7 @@ TorrentSession::~TorrentSession() {
 void TorrentSession::addTorrent( const QUrl & url ) {
 	libtorrent::add_torrent_params p;
 	// TODO read from configure
-	p.save_path = "./";
+	p.save_path = "/tmp";
 	// TODO maybe network url
 	p.ti = new libtorrent::torrent_info( url.toLocalFile().toStdWString() );
 	libtorrent::torrent_handle th = this->p_->session_.add_torrent( p );
