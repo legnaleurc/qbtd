@@ -1,5 +1,7 @@
 #include "localsessionsocket_p.hpp"
 
+#include <cstring>
+
 using qbtd::control::LocalSessionSocket;
 
 LocalSessionSocket::Private::Private( QLocalSocket * socket, LocalSessionSocket * host ):
@@ -69,7 +71,7 @@ bool LocalSessionSocket::open( OpenMode mode ) {
 qint64 LocalSessionSocket::readData( char * data, qint64 maxSize ) {
 	// TODO check link status
 	QByteArray buffer = this->p_->socket->read( maxSize );
-	qstrncpy( data, buffer, maxSize );
+	std::memcpy( data, buffer, maxSize );
 	return buffer.size();
 }
 
