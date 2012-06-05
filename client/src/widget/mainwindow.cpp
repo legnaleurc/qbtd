@@ -8,14 +8,16 @@
 using qbtd::widget::MainWindow;
 using qbtd::control::ClientSession;
 
-MainWindow::Private::Private( MainWindow * host ):
-host( host ),
+MainWindow::Private::Private( MainWindow * owner ):
+owner( owner ),
 ui(),
-serverDialog( new ServerDialog( host ) ),
-session( new ClientSession( this ) ) {
-	this->ui.setupUi( host );
+serverDialog( new ServerDialog( owner ) ),
+session( new ClientSession( this ) ),
+uploadDialog( new UploadDialog( owner ) ) {
+	this->ui.setupUi( owner );
 
 	this->connect( this->ui.action_Connect_To_Server, SIGNAL( triggered() ), SLOT( onConnectToServer() ) );
+	this->connect( this->ui.action_Upload_Torrent, SIGNAL( triggered() ), SLOT( onUploadTorrent() ) );
 	this->connect( this->session, SIGNAL( connected() ), SLOT( onConnected() ) );
 	this->connect( this->session, SIGNAL( error( bool, const QString & ) ), SLOT( onError( bool, const QString & ) ) );
 }
@@ -31,18 +33,28 @@ void MainWindow::Private::onConnectToServer() {
 
 void MainWindow::Private::onConnected() {
 	this->connect( this->session, SIGNAL( responsed( bool, const QVariant & ) ), SLOT( onResponsed( bool, const QVariant & ) ) );
-	this->session->request( "add", QUrl::fromLocalFile( "/tmp/test.torrent" ) );
 }
 
 void MainWindow::Private::onError( bool stop, const QString & message ) {
 	if( stop ) {
 		this->session->close();
 	}
-	QMessageBox::warning( this->host, QObject::tr( "Session Error" ), message );
+	QMessageBox::warning( this->owner, QObject::tr( "Session Error" ), message );
 }
 
 void MainWindow::Private::onResponsed( bool result, const QVariant & data ) {
 	qDebug() << __PRETTY_FUNCTION__ << result << data;
+}
+
+void MainWindow::Private::onUploadTorrent() {
+	if( QDialog::Accepted != this->uploadDialog->exec() ) {
+		return;
+	}
+	if( this->uploadDialog->isRemote() ) {
+		this->session->request( "add_from_remote", this->uploadDialog->getURL() );
+	} else {
+		this->session->request( "add", this->uploadDialog->getLocalFile() );
+	}
 }
 
 MainWindow::MainWindow():
