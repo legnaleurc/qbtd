@@ -15,6 +15,8 @@ class MainWindow::Private: public QObject {
 public:
 	explicit Private( MainWindow * owner );
 
+	void toggleUI( bool connected );
+
 public slots:
 	void onConnectToServer();
 	void onConnected();

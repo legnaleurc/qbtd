@@ -16,10 +16,17 @@ session( new ClientSession( this ) ),
 uploadDialog( new UploadDialog( owner ) ) {
 	this->ui.setupUi( owner );
 
+	this->toggleUI( false );
+
 	this->connect( this->ui.action_Connect_To_Server, SIGNAL( triggered() ), SLOT( onConnectToServer() ) );
 	this->connect( this->ui.action_Upload_Torrent, SIGNAL( triggered() ), SLOT( onUploadTorrent() ) );
 	this->connect( this->session, SIGNAL( connected() ), SLOT( onConnected() ) );
 	this->connect( this->session, SIGNAL( error( bool, const QString & ) ), SLOT( onError( bool, const QString & ) ) );
+}
+
+void MainWindow::Private::toggleUI( bool connected ) {
+	this->ui.action_Connect_To_Server->setDisabled( connected );
+	this->ui.action_Upload_Torrent->setEnabled( connected );
 }
 
 void MainWindow::Private::onConnectToServer() {
@@ -33,6 +40,7 @@ void MainWindow::Private::onConnectToServer() {
 
 void MainWindow::Private::onConnected() {
 	this->connect( this->session, SIGNAL( responsed( bool, const QVariant & ) ), SLOT( onResponsed( bool, const QVariant & ) ) );
+	this->toggleUI( true );
 }
 
 void MainWindow::Private::onError( bool stop, const QString & message ) {
