@@ -7,10 +7,15 @@
 namespace qbtd {
 namespace widget {
 
-class UploadDialog::Private {
+class UploadDialog::Private: public QObject {
+	Q_OBJECT
 public:
 	Private( UploadDialog * owner );
 
+public slots:
+	void onBrowse();
+
+public:
 	UploadDialog * owner;
 	Ui::UploadDialog ui;
 	QButtonGroup * group;

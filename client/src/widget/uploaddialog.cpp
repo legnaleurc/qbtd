@@ -1,10 +1,12 @@
 #include "uploaddialog_p.hpp"
 
 #include <QtCore/QFile>
+#include <QtGui/QFileDialog>
 
 using qbtd::widget::UploadDialog;
 
 UploadDialog::Private::Private( UploadDialog * owner ):
+QObject(),
 owner( owner ),
 ui(),
 group( new QButtonGroup( owner ) ) {
@@ -13,6 +15,16 @@ group( new QButtonGroup( owner ) ) {
 	this->group->addButton( this->ui.fromLocal );
 	this->group->addButton( this->ui.fromURL );
 	this->group->setExclusive( true );
+
+	this->connect( this->ui.browse, SIGNAL( clicked() ), SLOT( onBrowse() ) );
+}
+
+void UploadDialog::Private::onBrowse() {
+	QString path = QFileDialog::getOpenFileName( this->owner, QObject::tr( "Upload Torrent" ), QDir::homePath() );
+	if( path.isEmpty() ) {
+		return;
+	}
+	this->ui.localFile->setText( path );
 }
 
 UploadDialog::UploadDialog( QWidget * parent ):

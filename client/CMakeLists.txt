@@ -4,7 +4,7 @@ include(${QT_USE_FILE})
 
 set(QBTD_CLIENT_SOURCES "src/main.cpp" "src/widget/mainwindow.hpp" "src/widget/mainwindow_p.hpp" "src/widget/mainwindow.cpp" "src/widget/serverdialog.hpp" "src/widget/serverdialog_p.hpp" "src/widget/serverdialog.cpp" "src/widget/uploaddialog.hpp" "src/widget/uploaddialog_p.hpp" "src/widget/uploaddialog.cpp")
 
-qt4_wrap_cpp(QBTD_CLIENT_MOC_SOURCES "src/widget/mainwindow_p.hpp")
+qt4_wrap_cpp(QBTD_CLIENT_MOC_SOURCES "src/widget/mainwindow_p.hpp" "src/widget/uploaddialog_p.hpp")
 qt4_wrap_ui(QBTD_CLIENT_UIC_HEADERS "src/widget/mainwindow.ui" "src/widget/serverdialog.ui" "src/widget/uploaddialog.ui")
 
 include_directories("${CMAKE_SOURCE_DIR}/core/include" ${CMAKE_CURRENT_BINARY_DIR})
