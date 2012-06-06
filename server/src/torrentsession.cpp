@@ -49,9 +49,9 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 	libtorrent::add_torrent_params p;
 	// TODO read from configure
 	p.save_path = "/tmp";
-	// TODO maybe network url
 	p.ti = new libtorrent::torrent_info( e );
 	libtorrent::torrent_handle th = this->p_->session_.add_torrent( p );
+	// TODO remove this inspector
 	Inspector * inspector = new Inspector( th );
 	inspector->connect( inspector, SIGNAL( finished() ), SLOT( deleteLater() ) );
 }
