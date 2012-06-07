@@ -41,11 +41,17 @@ class User extends CI_Controller {
       $email = $this->input->post('email');
       $profile = array();
 
-      $result = $this->ion_auth->register($username, $password, $email, $profile, '');
-      if( $result == true ){
-         echo "New user: $username";
+      if( $this->ion_auth->email_check($email) == false ){
+         // Email has not been used
+         $result = $this->ion_auth->register($username, $password, $email, $profile, '');
+         if( $result == true ){
+            echo "New user: $username";
+         }else{
+            echo "Reg Failed";
+         }
       }else{
-         echo "Reg Failed";
+         // Email has been used
+         echo "This email has been regieterd.";
       }
    }
 
