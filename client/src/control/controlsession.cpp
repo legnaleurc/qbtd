@@ -21,6 +21,9 @@ success() {
 
 void ControlSession::Private::onResponsed( bool result, const QVariant & data ) {
 	qDebug() << __PRETTY_FUNCTION__ << result << data;
+	if( !this->success ) {
+		return;
+	}
 	this->success( result, data );
 	this->success = nullptr;
 }
@@ -60,7 +63,7 @@ void ControlSession::disconnectFromServer() {
 }
 
 void ControlSession::request( const QString & command, const QVariant & args, SuccessCallback success ) {
-	if( !this->p_->success ) {
+	if( this->p_->success ) {
 		return;
 	}
 	this->p_->success = success;
