@@ -2,6 +2,12 @@
 
 class User extends CI_Controller {
 
+   public function __construct()
+   {
+      parent::__construct();
+      $this->load->spark('ion_auth/2.2.4');
+   }
+
 	public function index()
 	{
       $data = array(
