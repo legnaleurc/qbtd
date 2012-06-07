@@ -29,8 +29,11 @@ void TorrentView::Private::doList( bool result, const QVariant & data ) {
 	this->model->setRowCount( torrents.size() );
 	for( int i = 0; i < torrents.size(); ++i ) {
 		QVariantMap torrent = torrents.at( i ).toMap();
-		this->model->item( i, 0 )->setData( torrent.value( "name" ), Qt::DisplayRole );
-		this->model->item( i, 1 )->setData( torrent.value( "progress" ), Qt::DisplayRole );
+		QStandardItem * item = new QStandardItem( torrent.value( "name" ).toString() );
+		this->model->setItem( i, 0, item );
+		item = new QStandardItem;
+		item->setData( torrent.value( "progress" ), Qt::DisplayRole );
+		this->model->setItem( i, 1, item );
 	}
 }
 
