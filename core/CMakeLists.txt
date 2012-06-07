@@ -11,3 +11,7 @@ qt4_wrap_cpp(QBTD_CORE_MOC_SOURCES "include/qbtd/clientsession.hpp" "src/clients
 add_library(qbtd-core SHARED ${QBTD_CORE_SOURCES} ${QBTD_CORE_MOC_SOURCES})
 target_link_libraries(qbtd-core ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTSCRIPT_LIBRARY})
 set_target_properties(qbtd-core PROPERTIES COMPILE_FLAGS "-std=c++0x -pipe -pedantic")
+# for clang; this detection is unstable, but close enough: http://www.cmake.org/cmake/help/cmake-2-8-docs.html#variable:CMAKE_LANG_COMPILER_ID
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+	set_target_properties(qbtd-core PROPERTIES COMPILE_FLAGS "-stdlib=libc++ -std=c++0x -pipe -pedantic" LINK_FLAGS "-stdlib=libc++")
+endif()
