@@ -4,7 +4,6 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 #include "serverdialog.hpp"
-#include "qbtd/clientsession.hpp"
 #include "uploaddialog.hpp"
 
 namespace qbtd {
@@ -21,14 +20,12 @@ public slots:
 	void onConnectToServer();
 	void onConnected();
 	void onError( bool stop, const QString & message );
-	void onResponsed( bool result, const QVariant & data );
 	void onUploadTorrent();
 
 public:
 	MainWindow * owner;
 	Ui::MainWindow ui;
 	ServerDialog * serverDialog;
-	control::ClientSession * session;
 	UploadDialog * uploadDialog;
 };
 
