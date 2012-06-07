@@ -59,7 +59,7 @@ QVariantList TorrentSession::listTorrent() const {
 		QVariantMap m;
 		m.insert( "name", QString::fromStdString( it->name() ) );
 		libtorrent::torrent_status status = it->status();
-		m.insert( "progress", status.progress );
+		m.insert( "progress", static_cast< double >( status.progress ) );
 		l.append( m );
 	}
 	return l;
