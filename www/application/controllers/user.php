@@ -18,6 +18,19 @@ class User extends CI_Controller {
 
    public function login()
    {
+      $this->load->library('form_validation');
+
+      $username = $this->input->post('username');
+      $password = $this->input->post('password');
+
+      if( $this->ion_auth->login($username, $password) == true ){
+         // Login success
+         echo "Login successs";
+      }else{
+         // Login Failed
+         echo "Login Failed. ID: $username";
+      }
+
    }
 
    public function register()

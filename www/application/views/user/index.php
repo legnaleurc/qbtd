@@ -1,13 +1,14 @@
 <?php  $this->load->view('header');  ?>
 <?php  $this->load->view('navbar');  ?>
+<?php  $this->load->helper('url');  ?>
 
 <div class="row">
 
    <div class="span6">
       <h2>Login</h2>
-      <form class="well" action="" method="post" accept-charset="utf-8">
+      <form class="well" action="<?php echo site_url('user/login/'); ?>" method="post" accept-charset="utf-8">
          <label>Username: </label>
-         <input class="span3 " type="text" name="id" placeholder="longin id">
+         <input class="span3 " type="text" name="username" placeholder="longin id">
          
          <label>Password: </label>
          <input class="span3" type="password" name="password" placeholder="your password">
@@ -20,9 +21,9 @@
 
    <div class="span6">
       <h2>Register</h2>
-      <form class="well" action="" method="post" accept-charset="utf-8">
+      <form class="well" action="<?php echo site_url('user/login/'); ?>" method="post" accept-charset="utf-8">
          <label for="username">Username: </label>
-         <input type="text" name="id" value="" id="username">
+         <input type="text" name="username" value="" id="username">
 
          <label for="email">Email</label>
          <input class="input-smail" type="text" name="email" value="" id="email">
