@@ -46,6 +46,7 @@ void MainWindow::Private::onConnected() {
 void MainWindow::Private::onError( bool stop, const QString & message ) {
 	if( stop ) {
 		this->session->close();
+		this->toggleUI( false );
 	}
 	QMessageBox::warning( this->owner, QObject::tr( "Session Error" ), message );
 }
