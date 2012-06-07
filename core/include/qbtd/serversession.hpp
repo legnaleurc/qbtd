@@ -15,7 +15,7 @@ public:
 	ServerSession( QLocalSocket * socket, QObject * parent );
 	ServerSession( QTcpSocket * socket, QObject * parent );
 
-	void close();
+	void disconnectFromClient();
 	void response( bool result, const QVariant & data );
 
 signals:

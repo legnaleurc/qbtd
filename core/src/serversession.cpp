@@ -57,7 +57,7 @@ p_( new Private( nullptr, this ) ) {
 	this->connect( this->p_.get(), SIGNAL( requested( const QString &, const QVariant & ) ), SIGNAL( requested( const QString &, const QVariant & ) ) );
 }
 
-void ServerSession::close() {
+void ServerSession::disconnectFromClient() {
 	this->p_->socket->close();
 }
 

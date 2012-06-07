@@ -13,8 +13,8 @@ class ClientSession: public QObject {
 public:
 	explicit ClientSession( QObject * parent = 0 );
 
-	void close();
 	void connectToServer( const QString & path );
+	void disconnectFromServer();
 	void request( const QString & command, const QVariant & args );
 
 signals:

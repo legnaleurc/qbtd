@@ -59,7 +59,7 @@ p_( new Private ) {
 	this->connect( this->p_.get(), SIGNAL( responsed( bool, const QVariant & ) ), SIGNAL( responsed( bool, const QVariant & ) ) );
 }
 
-void ClientSession::close() {
+void ClientSession::disconnectFromServer() {
 	this->p_->socket->close();
 	this->p_->socket->deleteLater();
 	this->p_->socket = nullptr;

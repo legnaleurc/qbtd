@@ -59,7 +59,7 @@ void ControlSession::connectToServer( const QString & path ) {
 }
 
 void ControlSession::disconnectFromServer() {
-	this->p_->session->close();
+	this->p_->session->disconnectFromServer();
 }
 
 void ControlSession::request( const QString & command, const QVariant & args, SuccessCallback success ) {

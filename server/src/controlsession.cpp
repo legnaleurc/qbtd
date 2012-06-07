@@ -30,5 +30,5 @@ p_( new Private( session, this ) ) {
 }
 
 void ControlSession::close() {
-	this->p_->session->close();
+	this->p_->session->disconnectFromClient();
 }
