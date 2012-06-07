@@ -25,6 +25,11 @@ uploadDialog( new UploadDialog( owner ) ) {
 void MainWindow::Private::toggleUI( bool connected ) {
 	this->ui.action_Connect_To_Server->setDisabled( connected );
 	this->ui.action_Upload_Torrent->setEnabled( connected );
+	if( connected ) {
+		this->ui.torrentView->start();
+	} else {
+		this->ui.torrentView->stop();
+	}
 }
 
 void MainWindow::Private::onConnectToServer() {
