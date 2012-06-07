@@ -12,7 +12,7 @@ model( new QStandardItemModel( this ) ) {
 	this->model->setColumnCount( 2 );
 	this->owner->setModel( this->model );
 
-	this->timer->setInterval( 5000 );
+	this->timer->setInterval( 3000 );
 
 	this->connect( this->timer, SIGNAL( timeout() ), SLOT( onTimeout() ) );
 }
