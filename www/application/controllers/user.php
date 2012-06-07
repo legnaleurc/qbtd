@@ -35,6 +35,18 @@ class User extends CI_Controller {
 
    public function register()
    {
+      $username = $this->input->post('username');
+      $password = $this->input->post('password');
+      $password2 = $this->input->post('password2');
+      $email = $this->input->post('email');
+      $profile = array();
+
+      $result = $this->ion_auth->register($username, $password, $email, $profile, '');
+      if( $result == true ){
+         echo "New user: $username";
+      }else{
+         echo "Reg Failed";
+      }
    }
 
    public function checkID($id)
