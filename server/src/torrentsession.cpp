@@ -1,5 +1,4 @@
 #include "torrentsession_p.hpp"
-#include "inspector.hpp"
 
 #include <QtCore/QtDebug>
 
@@ -12,7 +11,7 @@ void TorrentSession::Private::destory( TorrentSession * data ) {
 }
 
 TorrentSession::Private::Private():
-session_() {
+session() {
 }
 
 void TorrentSession::initialize() {
@@ -33,7 +32,7 @@ TorrentSession & TorrentSession::instance() {
 TorrentSession::TorrentSession():
 p_( new Private ) {
 	// TODO read from configure
-	this->p_->session_.listen_on( std::make_pair( 6881, 6889 ) );
+	this->p_->session.listen_on( std::make_pair( 6881, 6889 ) );
 }
 
 TorrentSession::~TorrentSession() {
@@ -50,8 +49,18 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 	// TODO read from configure
 	p.save_path = "/tmp";
 	p.ti = new libtorrent::torrent_info( e );
-	libtorrent::torrent_handle th = this->p_->session_.add_torrent( p );
-	// TODO remove this inspector
-	Inspector * inspector = new Inspector( th );
-	inspector->connect( inspector, SIGNAL( finished() ), SLOT( deleteLater() ) );
+	libtorrent::torrent_handle th = this->p_->session.add_torrent( p );
+}
+
+QVariantList TorrentSession::listTorrent() const {
+	std::vector< libtorrent::torrent_handle > ths = this->p_->session.get_torrents();
+	QVariantList l;
+	for( auto it = ths.begin(); it != ths.end(); ++it ) {
+		QVariantMap m;
+		m.insert( "name", QString::fromStdString( it->name() ) );
+		libtorrent::torrent_status status = it->status();
+		m.insert( "progress", status.progress );
+		l.append( m );
+	}
+	return l;
 }

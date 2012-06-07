@@ -15,7 +15,7 @@ public:
 
 	Private();
 
-	libtorrent::session session_;
+	libtorrent::session session;
 };
 
 }

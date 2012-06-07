@@ -16,6 +16,7 @@ public:
 	Private();
 
 	std::pair< bool, QVariant > add( const QVariant & args );
+	std::pair< bool, QVariant > list( const QVariant & args );
 
 	QHash< QString, std::function< std::pair< bool, QVariant > ( const QVariant & ) > > commands;
 };
