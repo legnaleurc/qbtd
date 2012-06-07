@@ -21,7 +21,7 @@
 
    <div class="span6">
       <h2>Register</h2>
-      <form class="well" action="<?php echo site_url('user/login/'); ?>" method="post" accept-charset="utf-8">
+      <form class="well" action="<?php echo site_url('user/register/'); ?>" method="post" accept-charset="utf-8">
          <label for="username">Username: </label>
          <input type="text" name="username" value="" id="username">
 
