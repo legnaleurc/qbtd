@@ -1,6 +1,8 @@
 #ifndef QBTD_CONTROL_CLIENTSESSION_HPP
 #define QBTD_CONTROL_CLIENTSESSION_HPP
 
+#include "qbtd/config.hpp"
+
 #include <QtCore/QObject>
 
 #include <memory>
@@ -8,7 +10,7 @@
 namespace qbtd {
 namespace control {
 
-class ClientSession: public QObject {
+class QBTD_DLL ClientSession: public QObject {
 	Q_OBJECT
 public:
 	explicit ClientSession( QObject * parent = 0 );

@@ -1,6 +1,8 @@
 #ifndef QBTD_CONTROL_SESSIONSERVER_HPP
 #define QBTD_CONTROL_SESSIONSERVER_HPP
 
+#include "qbtd/config.hpp"
+
 #include <QtCore/QObject>
 #include <QtNetwork/QHostAddress>
 
@@ -11,7 +13,7 @@ namespace control {
 
 class ServerSession;
 
-class SessionServer: public QObject {
+class QBTD_DLL SessionServer: public QObject {
 	Q_OBJECT
 public:
 	explicit SessionServer( QObject * parent = 0 );

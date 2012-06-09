@@ -1,6 +1,8 @@
 #ifndef QBTD_CONTROL_SERVERSESSION_HPP
 #define QBTD_CONTROL_SERVERSESSION_HPP
 
+#include "qbtd/config.hpp"
+
 #include <QtNetwork/QLocalSocket>
 #include <QtNetwork/QTcpSocket>
 
@@ -9,7 +11,7 @@
 namespace qbtd {
 namespace control {
 
-class ServerSession: public QObject {
+class QBTD_DLL ServerSession: public QObject {
 	Q_OBJECT
 public:
 	ServerSession( QLocalSocket * socket, QObject * parent );
