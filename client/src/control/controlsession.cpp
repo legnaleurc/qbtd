@@ -2,8 +2,6 @@
 
 #include <cassert>
 
-#include <QtCore/QtDebug>
-
 using qbtd::control::ControlSession;
 
 std::unique_ptr< ControlSession, std::function< void ( ControlSession * ) > > ControlSession::Private::self;
@@ -20,7 +18,6 @@ success() {
 }
 
 void ControlSession::Private::onResponsed( bool result, const QVariant & data ) {
-	qDebug() << __PRETTY_FUNCTION__ << result << data;
 	if( !this->success ) {
 		return;
 	}

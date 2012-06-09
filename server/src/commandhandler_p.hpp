@@ -5,6 +5,8 @@
 
 #include <QtCore/QHash>
 
+#include <functional>
+
 namespace qbtd {
 namespace control {
 

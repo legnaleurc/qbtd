@@ -5,6 +5,7 @@
 #include <QtCore/QtDebug>
 
 using qbtd::control::ControlSession;
+using qbtd::control::ServerSession;
 
 ControlSession::Private::Private( ServerSession * session, ControlSession * host ):
 host( host ),

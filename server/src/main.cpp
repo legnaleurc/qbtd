@@ -12,11 +12,13 @@ void cleanup( int /*signum*/ ) {
 }
 
 int main( int argc, char * argv[] ) {
-	signal( SIGHUP, cleanup );
 	signal( SIGINT, cleanup );
 	signal( SIGTERM, cleanup );
-	signal( SIGQUIT, cleanup );
 	signal( SIGABRT, cleanup );
+#ifndef Q_OS_WIN
+	signal( SIGQUIT, cleanup );
+	signal( SIGHUP, cleanup );
+#endif
 
 	QCoreApplication a( argc, argv );
 

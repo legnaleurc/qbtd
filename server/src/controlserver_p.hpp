@@ -7,6 +7,8 @@
 
 #include <QtNetwork/QLocalServer>
 
+#include <functional>
+
 namespace qbtd {
 namespace control {
 
