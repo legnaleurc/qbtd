@@ -14,8 +14,8 @@ endif()
 
 if(NOT LR_FOUND AND NOT LibtorrentRasterbar_FOUND)
 	# find by my hand
-	find_path(LR_INCLUDE_DIRS libtorrent HINTS "${LibtorrentRasterbar_ROOT}/include")
-	find_library(LR_LIBRARIES torrent-rasterbar HINTS "${LibtorrentRasterbar_ROOT}/lib")
+	find_path(LR_INCLUDE_DIRS libtorrent HINTS "${LIBTORRENT_RASTERBAR_ROOT}/include")
+	find_library(LR_LIBRARIES torrent-rasterbar HINTS "${LIBTORRENT_RASTERBAR_ROOT}/lib")
 	if(LR_INCLUDE_DIRS AND LR_LIBRARIES)
 		set(LibtorrentRasterbar_FOUND TRUE CACHE INTERNAL "")
 		set(LIBTORRENT_RASTERBAR_INCLUDE_DIRS ${LR_INCLUDE_DIRS} CACHE INTERNAL "")
@@ -24,6 +24,16 @@ if(NOT LR_FOUND AND NOT LibtorrentRasterbar_FOUND)
 		set(LR_CFLAGS -DTORRENT_LINKING_SHARED -DTORRENT_USE_OPENSSL CACHE INTERNAL "")
 		set(LR_CFLAGS_OTHER -DWITH_SHIPPED_GEOIP_H -DBOOST_ASIO_HASH_MAP_BUCKETS=1021 -DBOOST_FILESYSTEM_VERSION=2 -DBOOST_EXCEPTION_DISABLE CACHE INTERNAL "")
 	endif()
+endif()
+
+if(NOT OPENSSL_FOUND AND LibtorrentRasterbar_FOUND)
+	find_package(OpenSSL REQUIRED)
+	list(APPEND LIBTORRENT_RASTERBAR_INCLUDE_DIRS ${OPENSSL_INCLUDE_DIR})
+endif()
+
+if(NOT BOOST_FOUND AND LibtorrentRasterbar_FOUND)
+	find_package(Boost REQUIRED COMPONENTS system date_time thread)
+	list(APPEND LIBTORRENT_RASTERBAR_LIBRARIES ${Boost_LIBRARIES})
 endif()
 
 set(LIBTORRENT_RASTERBAR_USE_FILE ${CMAKE_SOURCE_DIR}/cmake/modules/UseLibtorrentRasterbar.cmake)
