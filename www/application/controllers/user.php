@@ -41,6 +41,13 @@ class User extends CI_Controller {
 
    }
 
+   public function logout()
+   {
+      $this->ion_auth->logout();
+      $this->load->helper('url');
+      redirect('');
+   }
+
    public function register()
    {
       $username = $this->input->post('username');
