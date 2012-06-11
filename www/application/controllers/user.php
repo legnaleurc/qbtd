@@ -63,7 +63,7 @@ class User extends CI_Controller {
       }
    }
 
-   public function checkID($id)
+   public function checkUsername($username)
    {
       // code...
    }
@@ -73,9 +73,9 @@ class User extends CI_Controller {
       // code...
    }
 
-   private function getUserInfo($id="")
+   private function getUserInfo($id=NULL)
    {
-      $info = $this->ion_auth->user()->row();
+      $info = $this->ion_auth->user($id)->row();
       $user =  array(
          'sn' => $info->id ,
          'id' => $info->username,
