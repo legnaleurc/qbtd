@@ -1,5 +1,6 @@
 #include "serversession_p.hpp"
 #include "localsessionsocket.hpp"
+#include "tcpsessionsocket.hpp"
 #include "json.hpp"
 
 #include <QtCore/QTextStream>
@@ -53,7 +54,7 @@ p_( new Private( new LocalSessionSocket( socket ), this ) ) {
 
 ServerSession::ServerSession( QTcpSocket * socket, QObject * parent ):
 QObject( parent ),
-p_( new Private( nullptr, this ) ) {
+p_( new Private( new TcpSessionSocket( socket ), this ) ) {
 	this->connect( this->p_.get(), SIGNAL( requested( const QString &, const QVariant & ) ), SIGNAL( requested( const QString &, const QVariant & ) ) );
 }
 
