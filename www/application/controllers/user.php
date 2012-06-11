@@ -32,8 +32,6 @@ class User extends CI_Controller {
          redirect('user/');
       }
 
-      $this->load->library('form_validation');
-
       $username = $this->input->post('username');
       $password = $this->input->post('password');
 
