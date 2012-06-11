@@ -6,6 +6,7 @@ class User extends CI_Controller {
    {
       parent::__construct();
       $this->load->spark('ion_auth/2.2.4');
+      $this->load->helper('url');
    }
 
 	public function index()
@@ -26,6 +27,11 @@ class User extends CI_Controller {
 
    public function login()
    {
+      // Check if user has loggedin
+      if( $this->ion_auth->logged_in() == true ){
+         redirect('user/');
+      }
+
       $this->load->library('form_validation');
 
       $username = $this->input->post('username');
@@ -33,7 +39,11 @@ class User extends CI_Controller {
 
       if( $this->ion_auth->login($username, $password) == true ){
          // Login success
-         echo "Login successs";
+         $data = array(
+            'page_title' => 'Project List',
+            'loggedin' => true
+         );
+         $this->load->view('user/index', $data);
       }else{
          // Login Failed
          echo "Login Failed. ID: $username";
@@ -50,6 +60,11 @@ class User extends CI_Controller {
 
    public function register()
    {
+      // Check if user has loggedin
+      if( $this->ion_auth->logged_in() == true ){
+         redirect('user/');
+      }
+
       $username = $this->input->post('username');
       $password = $this->input->post('password');
       $password2 = $this->input->post('password2');
