@@ -1,6 +1,6 @@
 #include "clientsession_p.hpp"
 #include "localsessionsocket.hpp"
-#include "json.hpp"
+#include "utility/json.hpp"
 
 #include <QtCore/QTextStream>
 

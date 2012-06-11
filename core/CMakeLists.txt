@@ -2,14 +2,27 @@ find_package(Qt4 REQUIRED QtNetwork QtScript)
 
 include(${QT_USE_FILE})
 
-include_directories("include")
+include_directories("include" "src")
 add_definitions(-DQBTD_LIBRARY)
 
-set(QBTD_CORE_SOURCES "include/qbtd/config.hpp" "src/json.hpp" "src/json.cpp" "include/qbtd/clientsession.hpp" "src/clientsession_p.hpp" "src/clientsession.cpp" "include/qbtd/sessionserver.hpp" "src/sessionserver_p.hpp" "src/sessionserver.cpp" "include/qbtd/serversession.hpp" "src/serversession_p.hpp" "src/serversession.cpp" "src/sessionsocket.hpp" "src/sessionsocket_p.hpp" "src/sessionsocket.cpp" "src/localsessionsocket.hpp" "src/localsessionsocket_p.hpp" "src/localsessionsocket.cpp" "src/tcpsessionsocket.hpp" "src/tcpsessionsocket_p.hpp" "src/tcpsessionsocket.cpp")
+# glob all sources
+file(GLOB_RECURSE QBTD_CORE_SOURCES "src/*.cpp")
+file(GLOB_RECURSE QBTD_CORE_HEADERS "src/*.hpp")
+file(GLOB_RECURSE QBTD_CORE_PUBLIC_HEADERS "include/*.hpp")
 
-qt4_wrap_cpp(QBTD_CORE_MOC_SOURCES "include/qbtd/clientsession.hpp" "src/clientsession_p.hpp" "include/qbtd/sessionserver.hpp" "src/sessionserver_p.hpp" "include/qbtd/serversession.hpp" "src/serversession_p.hpp" "src/sessionsocket.hpp" "src/localsessionsocket_p.hpp" "src/tcpsessionsocket_p.hpp")
+set(QBTD_CORE_MOC_HEADERS "")
+foreach(hdr ${QBTD_CORE_HEADERS} ${QBTD_CORE_PUBLIC_HEADERS})
+	file(STRINGS "${hdr}" tmp REGEX "Q_OBJECT")
+	if(tmp)
+		list(APPEND QBTD_CORE_MOC_HEADERS "${hdr}")
+	endif()
+endforeach()
 
-add_library(qbtd-core SHARED ${QBTD_CORE_SOURCES} ${QBTD_CORE_MOC_SOURCES})
+qt4_wrap_cpp(QBTD_CORE_MOC_SOURCES ${QBTD_CORE_MOC_HEADERS})
+
+set(QBTD_CORE_COMPILE_UNITS ${QBTD_CORE_SOURCES} ${QBTD_CORE_HEADERS} ${QBTD_CORE_PUBLIC_HEADERS} ${QBTD_CORE_MOC_SOURCES})
+
+add_library(qbtd-core SHARED ${QBTD_CORE_COMPILE_UNITS})
 target_link_libraries(qbtd-core ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTSCRIPT_LIBRARY})
 if(CMAKE_COMPILER_IS_GNUCXX)
 	set_target_properties(qbtd-core PROPERTIES COMPILE_FLAGS "-std=c++0x -pipe -pedantic")
