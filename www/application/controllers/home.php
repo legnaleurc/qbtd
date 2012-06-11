@@ -5,7 +5,8 @@ class Home extends CI_Controller {
 	public function index()
 	{
       $data = array(
-         'page_title' => 'Welcome to qbtd' 
+         'page_title' => 'Welcome to qbtd',
+         'loggedin' => false
       );
 		$this->load->view('home_welcome', $data);
 	}
