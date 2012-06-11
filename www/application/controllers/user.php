@@ -10,10 +10,18 @@ class User extends CI_Controller {
 
 	public function index()
 	{
-      $data = array(
-         'page_title' => 'Login'
-      );
-      $this->load->view('user/index', $data);
+      if( $this->ion_auth->logged_in() == true ){
+         $data['page_title'] = 'File List';
+         $data['loggedin'] = true;
+         $data['user'] = $this->getUserInfo();
+         $this->load->view('user/list', $data);
+      }else{
+         $data = array(
+            'page_title' => 'Login',
+            'loggedin' => false
+         );
+         $this->load->view('user/index', $data);
+      }
 	}
 
    public function login()
@@ -63,5 +71,16 @@ class User extends CI_Controller {
    public function checkMail($mail)
    {
       // code...
+   }
+
+   private function getUserInfo($id="")
+   {
+      $info = $this->ion_auth->user()->row();
+      $user =  array(
+         'sn' => $info->id ,
+         'id' => $info->username,
+         'email' => $info->email
+      );
+      return $user;
    }
 }
