@@ -41,7 +41,7 @@ class User extends CI_Controller {
             'page_title' => 'Project List',
             'loggedin' => true
          );
-         $this->load->view('user/index', $data);
+         redirect('user/');
       }else{
          // Login Failed
          echo "Login Failed. ID: $username";
