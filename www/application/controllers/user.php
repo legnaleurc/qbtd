@@ -97,14 +97,18 @@ class User extends CI_Controller {
    {
       $info = $this->ion_auth->user($id)->row();
       $groups = $this->ion_auth->get_users_groups()->result();
+      $isAdmin = false;
       foreach ($groups as $group) {
          $list[] = $group->id;
+         if( $group->id == 1 )
+            $isAdmin = true;
       }
       $user =  array(
          'sn' => $info->id ,
          'id' => $info->username,
          'email' => $info->email,
-         'groups' => $list
+         'groups' => $list,
+         'isAdmin' => $isAdmin
       );
       return $user;
    }
