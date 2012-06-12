@@ -96,10 +96,15 @@ class User extends CI_Controller {
    private function getUserInfo($id=NULL)
    {
       $info = $this->ion_auth->user($id)->row();
+      $groups = $this->ion_auth->get_users_groups()->result();
+      foreach ($groups as $group) {
+         $list[] = $group->id;
+      }
       $user =  array(
          'sn' => $info->id ,
          'id' => $info->username,
-         'email' => $info->email
+         'email' => $info->email,
+         'groups' => $list
       );
       return $user;
    }
