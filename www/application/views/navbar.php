@@ -10,11 +10,10 @@
                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="icon-user icon-white"></i>
                   Account
+                  <i class="caret"></i>
                   </a>
 
                   <ul class="dropdown-menu">
-                     <li><a href="#">Settings</a></li>
-                     <li class="divider"></li>
                      <li><a href="#">Sign Out</a></li>
                   </ul>
 
