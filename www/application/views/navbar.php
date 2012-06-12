@@ -5,7 +5,12 @@
 
 <?php if( $loggedin == true ): ?>
             <ul class="nav pull-right" >
-               <li><a href="#">Upload</a></li>
+
+            <?php if( $user['isAdmin'] == true): ?>
+               <li><a href="#">User Management</a></li>
+            <?php endif; ?>
+
+               <li><a href="#">Upload Torrent</a></li>
                <li class="dropdown">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="icon-user icon-white"></i>
