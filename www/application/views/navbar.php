@@ -14,7 +14,7 @@
                   </a>
 
                   <ul class="dropdown-menu">
-                     <li><a href="#">Sign Out</a></li>
+                     <li><a href="<?php echo site_url('user/logout/'); ?>">Sign Out</a></li>
                   </ul>
 
                </li>
