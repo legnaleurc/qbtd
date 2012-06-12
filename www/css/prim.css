@@ -2,3 +2,11 @@ body {
    padding-top: 60px; 
 }
 
+.navbar .brand {
+   color: #ccc;
+}
+
+.navbar .nav > li > a {
+   color: #bbb;
+}
+
