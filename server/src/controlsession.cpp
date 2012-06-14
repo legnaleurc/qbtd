@@ -1,11 +1,13 @@
 #include "controlsession_p.hpp"
 #include "qbtd/serversession.hpp"
 #include "commandhandler.hpp"
+#include "qbtd/jsonerror.hpp"
 
 #include <QtCore/QtDebug>
 
 using qbtd::control::ControlSession;
 using qbtd::control::ServerSession;
+using qbtd::exception::JsonError;
 
 ControlSession::Private::Private( ServerSession * session, ControlSession * host ):
 host( host ),
@@ -22,7 +24,11 @@ ControlSession::Private::~Private() {
 void ControlSession::Private::onRequested( const QString & command, const QVariant & args ) {
 	qDebug() << command << args;
 	auto response = CommandHandler::instance().execute( command, args );
-	this->session->response( response.first, response.second );
+	try {
+		this->session->response( response.first, response.second );
+	} catch( JsonError & e ) {
+		this->session->response( false, QString( "server can not encode response" ) );
+	}
 }
 
 ControlSession::ControlSession( ServerSession * session, QObject * parent ):

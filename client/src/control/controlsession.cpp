@@ -1,8 +1,10 @@
 #include "controlsession_p.hpp"
+#include "qbtd/jsonerror.hpp"
 
 #include <cassert>
 
 using qbtd::control::ControlSession;
+using qbtd::exception::JsonError;
 
 std::unique_ptr< ControlSession, std::function< void ( ControlSession * ) > > ControlSession::Private::self;
 
@@ -64,5 +66,9 @@ void ControlSession::request( const QString & command, const QVariant & args, Su
 		return;
 	}
 	this->p_->success = success;
-	this->p_->session->request( command, args );
+	try {
+		this->p_->session->request( command, args );
+	} catch( JsonError & e ) {
+		emit this->error( false, QObject::tr( "Can not encode request: %1" ).arg( e.getMessage() ) );
+	}
 }

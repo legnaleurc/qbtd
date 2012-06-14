@@ -1,4 +1,5 @@
 #include "json.hpp"
+#include "qbtd/jsonerror.hpp"
 
 #include <QtCore/QUrl>
 
@@ -52,6 +53,10 @@ QVariant fromJSON( const QString & json, QScriptEngine * engine ) {
 	engine->globalObject().setProperty( "tmp", json );
 	QScriptValue v = engine->evaluate( "JSON.parse( tmp );" );
 	engine->globalObject().setProperty( "tmp", engine->nullValue() );
+	if( engine->hasUncaughtException() ) {
+		v = engine->uncaughtException();
+		throw exception::JsonError( v.property( "message" ).toString() );
+	}
 	return v.toVariant();
 }
 
@@ -59,6 +64,10 @@ QString toJSON( const QVariant & variant, QScriptEngine * engine ) {
 	engine->globalObject().setProperty( "tmp", serialize( variant, engine ) );
 	QString json = engine->evaluate( "JSON.stringify( tmp );" ).toString();
 	engine->globalObject().setProperty( "tmp", engine->nullValue() );
+	if( engine->hasUncaughtException() ) {
+		QScriptValue v = engine->uncaughtException();
+		throw exception::JsonError( v.property( "message" ).toString() );
+	}
 	return json;
 }
 
