@@ -24,7 +24,7 @@ void ControlSession::Private::onResponsed( bool result, const QVariant & data ) 
 		return;
 	}
 	this->success( result, data );
-	this->success = nullptr;
+	this->success = NULL;
 }
 
 void ControlSession::initialize() {
@@ -69,7 +69,7 @@ void ControlSession::request( const QString & command, const QVariant & args, Su
 	try {
 		this->p_->session->request( command, args );
 	} catch( JsonError & e ) {
-		this->p_->success = nullptr;
+		this->p_->success = NULL;
 		emit this->error( false, QObject::tr( "Can not encode request: %1" ).arg( e.getMessage() ) );
 	}
 }

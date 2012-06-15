@@ -58,9 +58,9 @@ void MainWindow::Private::onUploadTorrent() {
 		return;
 	}
 	if( this->uploadDialog->isRemote() ) {
-		ControlSession::instance().request( "add_from_remote", this->uploadDialog->getURL(), nullptr );
+		ControlSession::instance().request( "add_from_remote", this->uploadDialog->getURL(), NULL );
 	} else {
-		ControlSession::instance().request( "add", this->uploadDialog->getLocalFile(), nullptr );
+		ControlSession::instance().request( "add", this->uploadDialog->getLocalFile(), NULL );
 	}
 }
 

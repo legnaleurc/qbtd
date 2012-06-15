@@ -99,7 +99,7 @@ int SessionServer::maxPendingConnections() const {
 
 ServerSession * SessionServer::nextPendingConnection() {
 	if( this->p_->pendingSessions.empty() ) {
-		return nullptr;
+		return NULL;
 	}
 	ServerSession * session = this->p_->pendingSessions.front();
 	this->p_->pendingSessions.pop();
@@ -119,13 +119,13 @@ bool SessionServer::waitForNewConnection( int msec, bool * timedOut ) {
 	wait.exec();
 	if( !timer.isActive() ) {
 		// timer timeout
-		if( timedOut != nullptr ) {
+		if( timedOut != NULL ) {
 			*timedOut = true;
 		}
 		return false;
 	} else {
 		// new connections
-		if( timedOut != nullptr ) {
+		if( timedOut != NULL ) {
 			*timedOut = false;
 		}
 		timer.stop();

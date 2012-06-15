@@ -15,7 +15,7 @@ session() {
 }
 
 void TorrentSession::initialize() {
-	if( Private::self != nullptr ) {
+	if( Private::self != NULL ) {
 		return;
 	}
 	Private::self.reset( new TorrentSession );
@@ -23,7 +23,7 @@ void TorrentSession::initialize() {
 }
 
 TorrentSession & TorrentSession::instance() {
-	if( Private::self == nullptr ) {
+	if( Private::self == NULL ) {
 		assert( !"not initialized" );
 	}
 	return *Private::self;

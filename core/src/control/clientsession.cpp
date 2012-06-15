@@ -8,7 +8,7 @@ using qbtd::control::ClientSession;
 
 ClientSession::Private::Private():
 QObject(),
-socket( nullptr ),
+socket( NULL ),
 engine( new QScriptEngine( this ) ) {
 }
 
@@ -29,7 +29,7 @@ void ClientSession::Private::onAckReceived() {
 		// TODO report error and close session
 		this->socket->close();
 		this->socket->deleteLater();
-		this->socket = nullptr;
+		this->socket = NULL;
 		return;
 	}
 	this->connect( this->socket, SIGNAL( readyRead() ), SLOT( onResponse() ) );
@@ -62,7 +62,7 @@ p_( new Private ) {
 void ClientSession::disconnectFromServer() {
 	this->p_->socket->close();
 	this->p_->socket->deleteLater();
-	this->p_->socket = nullptr;
+	this->p_->socket = NULL;
 }
 
 void ClientSession::connectToServer( const QString & path ) {

@@ -3,7 +3,19 @@
 
 #include <QtCore/QtDebug>
 
+#include <algorithm>
 #include <cassert>
+
+namespace {
+struct Helper {
+	Helper( qbtd::control::ControlSession * session ): session( session ) {
+	}
+	bool operator()( qbtd::control::ControlSession * s ) const {
+		return this->session == s;
+	}
+	qbtd::control::ControlSession * session;
+};
+}
 
 using qbtd::control::ControlServer;
 
@@ -29,13 +41,11 @@ void ControlServer::Private::onNewConnection() {
 
 void ControlServer::Private::onSessionDisconnected() {
 	ControlSession * session = static_cast< ControlSession * >( this->sender() );
-	assert( session != nullptr || !"ControlSession casting failed" );
-	auto it = std::remove_if( this->sessions.begin(), this->sessions.end(), [session]( ControlSession * s )->bool {
-		return session == s;
-	} );
-	std::for_each( it, this->sessions.end(), []( ControlSession * s )->void {
-		s->deleteLater();
-	} );
+	assert( session != NULL || !"ControlSession casting failed" );
+	auto it = std::remove_if( this->sessions.begin(), this->sessions.end(), Helper( session ) );
+	for( auto iit = it; iit != this->sessions.end(); ++iit ) {
+		( *iit )->deleteLater();
+	}
 	this->sessions.erase( it, this->sessions.end() );
 }
 
