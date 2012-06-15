@@ -71,5 +71,18 @@ QString toJSON( const QVariant & variant, QScriptEngine * engine ) {
 	return json;
 }
 
+QString toJSON( const QVariant & variant, const QString & spacer, QScriptEngine * engine ) {
+	engine->globalObject().setProperty( "tmp", serialize( variant, engine ) );
+	engine->globalObject().setProperty( "spacer", spacer );
+	QString json = engine->evaluate( "JSON.stringify( tmp, null, spacer );" ).toString();
+	engine->globalObject().setProperty( "spacer", engine->nullValue() );
+	engine->globalObject().setProperty( "tmp", engine->nullValue() );
+	if( engine->hasUncaughtException() ) {
+		QScriptValue v = engine->uncaughtException();
+		throw exception::JsonError( v.property( "message" ).toString() );
+	}
+	return json;
+}
+
 }
 }

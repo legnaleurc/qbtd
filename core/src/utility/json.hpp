@@ -9,6 +9,7 @@ namespace utility {
 
 QVariant fromJSON( const QString & json, QScriptEngine * engine );
 QString toJSON( const QVariant & variant, QScriptEngine * engine );
+QString toJSON( const QVariant & variant, const QString & spacer, QScriptEngine * engine );
 
 }
 }
