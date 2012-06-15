@@ -83,9 +83,9 @@ bool SessionServer::listen( const QString & name ) {
 	return listened;
 }
 
-bool SessionServer::listen( const QHostAddress & address ) {
+bool SessionServer::listen( const QHostAddress & address, quint16 port ) {
 	auto server = std::make_shared< QTcpServer >();
-	bool listened = server->listen( address );
+	bool listened = server->listen( address, port );
 	if( listened ) {
 		this->p_->connect( server.get(), SIGNAL( newConnection() ), SLOT( onNewTcpConnection() ) );
 		this->p_->tcpServers.push_back( server );

@@ -23,7 +23,7 @@ public:
 	bool hasPendingConnections() const;
 	bool isListening() const;
 	bool listen( const QString & name );
-	bool listen( const QHostAddress & address );
+	bool listen( const QHostAddress & address, quint16 port );
 	int maxPendingConnections() const;
 	ServerSession * nextPendingConnection();
 	void setMaxPendingConnections( int numConnections );

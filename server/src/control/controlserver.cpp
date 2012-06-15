@@ -74,6 +74,6 @@ bool ControlServer::listen( const QString & path ) {
 	return this->p_->server.listen( path );
 }
 
-bool ControlServer::listen( const QHostAddress & address ) {
-	return false;
+bool ControlServer::listen( const QHostAddress & address, quint16 port ) {
+	return this->p_->server.listen( address, port );
 }
