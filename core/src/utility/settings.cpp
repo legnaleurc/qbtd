@@ -5,6 +5,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 #include <QtCore/QTextCodec>
+#include <QtCore/QCoreApplication>
 
 #include <cassert>
 
@@ -22,7 +23,11 @@ Settings::Private::Private( const QString & path ):
 path( path ),
 engine(),
 data() {
-	QFile fin( path );
+	this->connect( QCoreApplication::instance(), SIGNAL( aboutToQuit() ), SLOT( cleanup() ) );
+}
+
+void Settings::Private::load() {
+	QFile fin( this->path );
 	if( !fin.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
 		throw FileError( fin.errorString() );
 	}
@@ -46,12 +51,36 @@ void Settings::Private::save() {
 	fout.close();;
 }
 
+void Settings::Private::cleanup() {
+	try {
+		this->save();
+	} catch( ... ) {
+		// TODO log error to stderr
+	}
+}
+
 void Settings::initialize( const QString & path ) {
 	if( Private::self ) {
 		return;
 	}
 	Private::self.reset( new Settings( path ) );
 	Private::self.get_deleter() = &Private::destroy;
+	try {
+		Private::self->p_->load();
+	} catch( Exception & ) {
+		Private::self.reset();
+		throw;
+	}
+}
+
+void Settings::initialize( const QString & path, const QVariantMap & settings ) {
+	if( Private::self ) {
+		return;
+	}
+	Private::self.reset( new Settings( path ) );
+	Private::self.get_deleter() = &Private::destroy;
+	Private::self->p_->data = settings;
+	Private::self->p_->save();
 }
 
 Settings & Settings::instance() {
@@ -66,11 +95,6 @@ p_( std::make_shared< Private >( path ) ) {
 }
 
 Settings::~Settings() {
-	try {
-		this->p_->save();
-	} catch( ... ) {
-		// TODO log error to stderr
-	}
 }
 
 QVariant Settings::get( const QString & key ) const {

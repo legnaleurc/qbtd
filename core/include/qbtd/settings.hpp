@@ -12,6 +12,7 @@ namespace utility {
 class Settings {
 public:
 	static void initialize( const QString & path );
+	static void initialize( const QString & path, const QVariantMap & settings );
 	static Settings & instance();
 
 	QVariant get( const QString & key ) const;
