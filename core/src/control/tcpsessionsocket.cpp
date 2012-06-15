@@ -34,7 +34,19 @@ void TcpSessionSocket::Private::initialize() {
 
 void TcpSessionSocket::Private::onError( QAbstractSocket::SocketError socketError ) {
 	this->owner->setErrorString( this->socket->errorString() );
-	emit this->error( true, this->socket->errorString() );
+
+	switch( this->socket->error() ) {
+	case QAbstractSocket::SocketTimeoutError:
+	case QAbstractSocket::DatagramTooLargeError:
+		// TODO discard buffer
+		emit this->error( false, this->socket->errorString() );
+		break;
+	default:
+		// QLocalSocket will be closed or not connected, so we must close buffer
+		this->host->QIODevice::close();
+		emit this->error( true, this->socket->errorString() );
+		break;
+	}
 }
 
 TcpSessionSocket::TcpSessionSocket( QTcpSocket * socket, QObject * parent ):
