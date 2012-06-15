@@ -7,7 +7,7 @@
             <ul class="nav pull-right" >
 
             <?php if( $user['isAdmin'] == true): ?>
-               <li><a href="#">User Management</a></li>
+               <li><a href="<?php echo site_url('admin/'); ?>">User Management</a></li>
             <?php endif; ?>
 
                <li><a href="#">Upload Torrent</a></li>
