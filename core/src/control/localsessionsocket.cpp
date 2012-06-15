@@ -34,7 +34,19 @@ void LocalSessionSocket::Private::initialize() {
 
 void LocalSessionSocket::Private::onError( QLocalSocket::LocalSocketError socketError ) {
 	this->host->setErrorString( this->socket->errorString() );
-	emit this->error( true, this->socket->errorString() );
+
+	switch( this->socket->error() ) {
+	case QLocalSocket::SocketTimeoutError:
+	case QLocalSocket::DatagramTooLargeError:
+		// TODO discard buffer
+		emit this->error( false, this->socket->errorString() );
+		break;
+	default:
+		// QLocalSocket will be closed or not connected, so we must close buffer
+		this->host->QIODevice::close();
+		emit this->error( true, this->socket->errorString() );
+		break;
+	}
 }
 
 LocalSessionSocket::LocalSessionSocket( QLocalSocket * socket, QObject * parent ):
