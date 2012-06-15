@@ -21,7 +21,7 @@ class User extends CI_Controller {
             'page_title' => 'Login',
             'loggedin' => false
          );
-         $this->load->view('user/index', $data);
+         $this->load->view('user/home', $data);
       }
 	}
 
