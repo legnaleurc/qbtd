@@ -43,7 +43,7 @@ void TcpSessionSocket::Private::onError( QAbstractSocket::SocketError socketErro
 		break;
 	default:
 		// QLocalSocket will be closed or not connected, so we must close buffer
-		this->host->QIODevice::close();
+		this->owner->QIODevice::close();
 		emit this->error( true, this->socket->errorString() );
 		break;
 	}
