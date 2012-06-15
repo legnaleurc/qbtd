@@ -3,13 +3,25 @@ find_package(LibtorrentRasterbar REQUIRED)
 
 include(${QT_USE_FILE})
 include(${LIBTORRENT_RASTERBAR_USE_FILE})
-include_directories("${CMAKE_SOURCE_DIR}/core/include")
+include_directories("${CMAKE_SOURCE_DIR}/core/include" "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
-set(QBTD_SERVER_SOURCES "src/main.cpp" "src/inspector.hpp" "src/inspector.cpp" "src/torrentsession.hpp" "src/torrentsession_p.hpp" "src/torrentsession.cpp" "src/controlserver.hpp" "src/controlserver_p.hpp" "src/controlserver.cpp" "src/commandhandler.hpp" "src/commandhandler_p.hpp" "src/commandhandler.cpp" "src/controlsession.hpp" "src/controlsession_p.hpp" "src/controlsession.cpp")
+# glob all sources
+file(GLOB_RECURSE QBTD_SERVER_SOURCES "src/*.cpp")
+file(GLOB_RECURSE QBTD_SERVER_HEADERS "src/*.hpp")
 
-qt4_wrap_cpp(QBTD_SERVER_MOC_SOURCES "src/inspector.hpp" "src/controlserver_p.hpp" "src/controlsession.hpp" "src/controlsession_p.hpp")
+set(QBTD_SERVER_MOC_HEADERS "")
+foreach(hdr ${QBTD_SERVER_HEADERS})
+	file(STRINGS "${hdr}" tmp REGEX "Q_OBJECT")
+	if(tmp)
+		list(APPEND QBTD_SERVER_MOC_HEADERS "${hdr}")
+	endif()
+endforeach()
 
-add_executable(qbtd-server ${QBTD_SERVER_SOURCES} ${QBTD_SERVER_MOC_SOURCES})
+qt4_wrap_cpp(QBTD_SERVER_MOC_SOURCES ${QBTD_SERVER_MOC_HEADERS})
+
+set(QBTD_SERVER_COMPILE_UNITS ${QBTD_SERVER_SOURCES} ${QBTD_SERVER_HEADERS} ${QBTD_SERVER_MOC_SOURCES})
+
+add_executable(qbtd-server ${QBTD_SERVER_COMPILE_UNITS})
 add_dependencies(qbtd-server qbtd-core)
 target_link_libraries(qbtd-server qbtd-core ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${LIBTORRENT_RASTERBAR_LIBRARIES})
 if(CMAKE_COMPILER_IS_GNUCXX)

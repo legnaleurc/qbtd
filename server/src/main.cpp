@@ -1,9 +1,9 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QTextCodec>
 
-#include "torrentsession.hpp"
-#include "controlserver.hpp"
-#include "commandhandler.hpp"
+#include "torrent/torrentsession.hpp"
+#include "control/controlserver.hpp"
+#include "control/commandhandler.hpp"
 
 #include <csignal>
 

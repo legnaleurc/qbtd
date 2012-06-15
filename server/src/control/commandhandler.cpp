@@ -1,5 +1,5 @@
 #include "commandhandler_p.hpp"
-#include "torrentsession.hpp"
+#include "torrent/torrentsession.hpp"
 
 #include <cassert>
 
