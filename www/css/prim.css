@@ -10,3 +10,11 @@ body {
    color: #bbb;
 }
 
+.admin-tabs-search {
+   margin-bottom: 0px;
+   margin-left: 15px;
+}
+
+.admin-tabs-search-icon {
+   margin-right: 6px;
+}
