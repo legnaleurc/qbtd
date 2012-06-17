@@ -37,7 +37,7 @@
                   <td><?php echo $u->username; ?></td>
                   <td><?php echo $u->email; ?></td>
                   <td>
-                     <a href="#" class="action-link"><i class="icon-trash action-icon"></i>Delete</a>
+                     <a href="<?php echo site_url('admin/deleteUser/'.$u->id); ?>" class="action-link"><i class="icon-trash action-icon"></i>Delete</a>
                      <a href="#" class="action-link"><i class="icon-pencil action-icon"></i>Edit</a>
                   </td>
                </tr>
