@@ -22,7 +22,11 @@ class Admin extends CI_Controller
    {
       $data['page_title'] = 'User Admin';
       $data['loggedin'] = true;
+
+      $users = $this->ion_auth->users()->result();
+
       $data['user'] =  $this->getUserInfo();
+      $data['users'] = $users;
       $this->load->view('admin/home', $data);
    }
 
