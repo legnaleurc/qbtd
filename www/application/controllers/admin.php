@@ -8,9 +8,9 @@ class Admin extends CI_Controller
       parent::__construct();
       $this->load->helper('url');
       $this->load->spark('ion_auth/2.2.4');
-      $user = $this->getUserInfo();
+      $user = $this->_getUserInfo();
       if( $this->ion_auth->logged_in() == TRUE ){
-         $user = $this->getUserInfo();
+         $user = $this->_getUserInfo();
          if( $user['isAdmin'] == FALSE )
             redirect('user/');
       }else{
@@ -25,7 +25,7 @@ class Admin extends CI_Controller
 
       $users = $this->ion_auth->users()->result();
 
-      $data['user'] =  $this->getUserInfo();
+      $data['user'] =  $this->_getUserInfo();
       $data['users'] = $users;
       $data['tab_general'] = 'active';
       $data['tab_admin'] = '';
@@ -40,14 +40,14 @@ class Admin extends CI_Controller
       // List all admins (group id = 1)
       $users = $this->ion_auth->users( array('1') )->result();
 
-      $data['user'] =  $this->getUserInfo();
+      $data['user'] =  $this->_getUserInfo();
       $data['users'] = $users;
       $data['tab_general'] = '';
       $data['tab_admin'] = 'active';
       $this->load->view('admin/home', $data);
    }
 
-   private function getUserInfo($id=NULL)
+   private function _getUserInfo($id=NULL)
    {
       $info = $this->ion_auth->user($id)->row();
       $groups = $this->ion_auth->get_users_groups()->result();
