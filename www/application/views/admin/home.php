@@ -37,8 +37,8 @@
                   <td><?php echo $u->username; ?></td>
                   <td><?php echo $u->email; ?></td>
                   <td>
-                     <i class="icon-trash"></i><a href="#">Delete</a>
-                     <i class="icon-pencil"></i><a href="#">Edit</a>
+                     <a href="#" class="action-link"><i class="icon-trash action-icon"></i>Delete</a>
+                     <a href="#" class="action-link"><i class="icon-pencil action-icon"></i>Edit</a>
                   </td>
                </tr>
             <?php endforeach; ?>

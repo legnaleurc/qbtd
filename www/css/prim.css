@@ -18,3 +18,11 @@ body {
 .admin-tabs-search-icon {
    margin-right: 6px;
 }
+
+.action-icon {
+   margin-right: 5px;
+}
+
+.action-link {
+   margin-right: 20px;
+}

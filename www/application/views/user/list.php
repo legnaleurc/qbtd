@@ -17,13 +17,12 @@
          <tr>
 
       <tr>
-         <td>johnroyer</td>
-         <td> <div class="progress"> <div class="bar" style="width: 70%;"></div></div></td>
-         <td style="width:250px;"> 
-            <i class="icon-download-alt"></i><a href="#">Download</a> 
-            <i class="icon-trash"></i><a href="#">Delete</a>
-            <i class="icon-info-sign"></i><a href="#">Detail</a>
-            <i class=""></i><a href="#"></a>
+         <td>Ubuntu-12.04-desktop-amd128.iso.torrent</td>
+         <td style="width: 200px;"> <div class="progress"> <div class="bar" style="width: 70%;"></div></div></td>
+         <td style=""> 
+            <a class="action-link" href="#"><i class="action-icon icon-download-alt"></i>Download</a> 
+            <a class="action-link" href="#"><i class="action-icon icon-trash"></i>Delete</a>
+            <a class="action-link" href="#"><i class="action-icon icon-info-sign"></i>Detail</a>
          </td>
       </tr>
       </tbody>
