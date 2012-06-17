@@ -8,8 +8,8 @@
 <div class="tabbable">
 
    <ul class="nav nav-tabs ">
-      <li class="active"><a href="#">General</a></li>
-      <li><a href="#">Admin</a></li>
+      <li class="<?php echo $tab_general; ?>"><a href="<?php echo site_url('admin/'); ?>">General</a></li>
+      <li class="<?php echo $tab_admin; ?>"><a href="<?php echo site_url('admin/superuser'); ?>">Admin</a></li>
       <li>
          <form class="form-search admin-tabs-search" action="#" method="post" accept-charset="utf-8">
          <i class="icon-search admin-tabs-search-icon"></i><input class="" type="text" name="key" value="">
