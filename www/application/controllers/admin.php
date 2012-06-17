@@ -47,9 +47,53 @@ class Admin extends CI_Controller
       $this->load->view('admin/home', $data);
    }
 
+   public function deleteUser($id=-1, $confirm='')
+   {
+      $id = intval($id);
+
+      // Check if user is exist
+      if( $id != -1 ){
+         $info = $this->_getUserInfo($id);
+         if( $info != NULL ){
+            if($confirm == 'confirmed'){
+               // Delete User
+               $this->ion_auth->delete_user($id);
+               redirect('admin/');
+            }else{
+               // Show confirm page
+               $data['page_title'] = 'User Delete Confirm';
+               $data['loggedin'] = true;
+               $data['user'] =  $this->_getUserInfo();
+               $target = $this->_getUserInfo( $id );
+               $data['target'] = array(
+                     'id' => $target['sn'],
+                     'username' => $target['id'],
+                     'email' => $target['email']
+                     );
+               $this->load->view('admin/delete_confirm', $data);
+            }
+         }else{
+            // User does not exist
+            $data['page_title'] = 'User Delete Failed';
+            $data['loggedin'] = true;
+            $data['user'] =  $this->_getUserInfo();
+
+            $data['error_title'] = 'User does not exist';
+            $data['error_detail'] = 'User ID not Found';
+
+            $this->load->view('admin/delete_error', $data);
+         }
+      }else{
+         // Invalid ID
+         redirect('admin/');
+      }
+   }
+
    private function _getUserInfo($id=NULL)
    {
       $info = $this->ion_auth->user($id)->row();
+      if( $info == NULL )
+         return NULL;
       $groups = $this->ion_auth->get_users_groups()->result();
       $isAdmin = false;
       foreach ($groups as $group) {
