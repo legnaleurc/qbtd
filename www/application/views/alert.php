@@ -11,7 +11,7 @@
    <?php elseif( $alert['type'] == 'warning' ): ?>
       <div class="alert">
    <?php elseif( $alert['type'] == 'success' ): ?>
-      <div class="alert alert-error">
+      <div class="alert alert-success">
    <?php elseif( $alert['type'] == 'info' ): ?>
       <div class="alert alert-info">
    <?php else: ?>
