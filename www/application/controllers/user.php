@@ -14,7 +14,7 @@ class User extends CI_Controller {
       if( $this->ion_auth->logged_in() == true ){
          $data['page_title'] = 'File List';
          $data['loggedin'] = true;
-         $data['user'] = $this->getUserInfo();
+         $data['user'] = $this->_getUserInfo();
          $this->load->view('user/list', $data);
       }else{
          $data = array(
@@ -44,7 +44,15 @@ class User extends CI_Controller {
          redirect('user/');
       }else{
          // Login Failed
-         echo "Login Failed. ID: $username";
+         $data['page_title'] = 'Login';
+         $data['loggedin'] = false;
+         $data['alert'] = array(
+            'type' => '',
+            'title' => 'Login Failed',
+            'text' => 'Please check your username, password and retry.',
+            'return' => site_url('user/')
+         );
+         $this->load->view('alert', $data);
       }
 
    }
@@ -73,13 +81,40 @@ class User extends CI_Controller {
          // Email has not been used
          $result = $this->ion_auth->register($username, $password, $email, $profile, '');
          if( $result == true ){
-            echo "New user: $username";
+            $this->ion_auth->login($username, $password);
+            $data['page_title'] = 'Register';
+            $data['loggedin'] = true;
+            $data['user'] = $this->_getUserInfo();
+            $data['alert'] = array(
+                  'type' => 'success',
+                  'title' => 'Welcome',
+                  'text' => 'Register complete. You can use the service now. Have fun!',
+                  'return' => site_url('user/')
+                  );
+            $this->load->view('alert', $data);
          }else{
-            echo "Reg Failed";
+            // ion_auth identity check failed
+            $data['page_title'] = 'Register';
+            $data['loggedin'] = false;
+            $data['alert'] = array(
+                  'type' => 'warning',
+                  'title' => 'Register Failed',
+                  'text' => 'Username and email maybe used. Check and try again.',
+                  'return' => site_url('user/')
+                  );
+            $this->load->view('alert', $data);
          }
       }else{
          // Email has been used
-         echo "This email has been regieterd.";
+         $data['page_title'] = 'Register';
+         $data['loggedin'] = false;
+         $data['alert'] = array(
+               'type' => 'info',
+               'title' => 'Email has been used',
+               'text' => 'This email has been used. Please use another email to register.',
+               'return' => site_url('user/')
+               );
+         $this->load->view('alert', $data);
       }
    }
 
@@ -93,7 +128,7 @@ class User extends CI_Controller {
       // code...
    }
 
-   private function getUserInfo($id=NULL)
+   private function _getUserInfo($id=NULL)
    {
       $info = $this->ion_auth->user($id)->row();
       $groups = $this->ion_auth->get_users_groups()->result();
