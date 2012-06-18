@@ -79,27 +79,46 @@ class User extends CI_Controller {
 
       if( $this->ion_auth->email_check($email) == false ){
          // Email has not been used
-         $result = $this->ion_auth->register($username, $password, $email, $profile, '');
-         if( $result == true ){
-            $this->ion_auth->login($username, $password);
-            $data['page_title'] = 'Register';
-            $data['loggedin'] = true;
-            $data['user'] = $this->_getUserInfo();
-            $data['alert'] = array(
-                  'type' => 'success',
-                  'title' => 'Welcome',
-                  'text' => 'Register complete. You can use the service now. Have fun!',
-                  'return' => site_url('user/')
-                  );
-            $this->load->view('alert', $data);
+
+         // Check if email is valid
+         $this->load->library('form_validation');
+         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+         $valid = $this->form_validation->run();
+         if( $valid == true ){
+            // Email is valid
+            $result = $this->ion_auth->register($username, $password, $email, $profile, '');
+            if( $result == true ){
+               $this->ion_auth->login($username, $password);
+               $data['page_title'] = 'Register';
+               $data['loggedin'] = true;
+               $data['user'] = $this->_getUserInfo();
+               $data['alert'] = array(
+                     'type' => 'success',
+                     'title' => 'Welcome',
+                     'text' => 'Register complete. You can use the service now. Have fun!',
+                     'return' => site_url('user/')
+                     );
+               $this->load->view('alert', $data);
+            }else{
+               // ion_auth identity check failed
+               $data['page_title'] = 'Register';
+               $data['loggedin'] = false;
+               $data['alert'] = array(
+                     'type' => 'warning',
+                     'title' => 'Register Failed',
+                     'text' => 'Username and email maybe used. Check and try again.',
+                     'return' => site_url('user/')
+                     );
+               $this->load->view('alert', $data);
+            }
          }else{
-            // ion_auth identity check failed
+            // Email is not Valid
             $data['page_title'] = 'Register';
             $data['loggedin'] = false;
             $data['alert'] = array(
                   'type' => 'warning',
-                  'title' => 'Register Failed',
-                  'text' => 'Username and email maybe used. Check and try again.',
+                  'title' => 'Invalid Email',
+                  'text' => 'Email is not valid. Please enter an usable email.',
                   'return' => site_url('user/')
                   );
             $this->load->view('alert', $data);
