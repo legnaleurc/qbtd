@@ -26,3 +26,8 @@ body {
 .action-link {
    margin-right: 20px;
 }
+
+.in-center {
+   width: 50%;
+   margin: 30px auto 0px auto;
+}
