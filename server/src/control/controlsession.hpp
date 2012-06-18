@@ -1,18 +1,19 @@
-#ifndef CONTROLSESSION_HPP
-#define CONTROLSESSION_HPP
+#ifndef QBTD_CONTROL_CONTROLSESSION_HPP
+#define QBTD_CONTROL_CONTROLSESSION_HPP
 
-#include <QtNetwork/QLocalServer>
+#include <QtCore/QObject>
 
 #include <memory>
 
 namespace qbtd {
 namespace control {
 
+class ServerSession;
+
 class ControlSession: public QObject {
 	Q_OBJECT
 public:
-	ControlSession();
-	explicit ControlSession( QLocalSocket * socket );
+	explicit ControlSession( ServerSession * session, QObject * parent = 0 );
 
 	void close();
 

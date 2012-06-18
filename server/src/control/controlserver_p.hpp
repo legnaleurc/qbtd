@@ -2,9 +2,12 @@
 #define CONTROLSERVER_HPP_
 
 #include "controlserver.hpp"
-#include "qbtd/controlsession.hpp"
+#include "qbtd/sessionserver.hpp"
+#include "controlsession.hpp"
 
 #include <QtNetwork/QLocalServer>
+
+#include <functional>
 
 namespace qbtd {
 namespace control {
@@ -22,8 +25,8 @@ public slots:
 	void onSessionDisconnected();
 
 public:
-	QLocalServer server;
-	std::vector< std::shared_ptr< ControlSession > > sessions;
+	SessionServer server;
+	std::vector< ControlSession * > sessions;
 };
 
 }

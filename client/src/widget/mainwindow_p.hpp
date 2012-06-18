@@ -4,7 +4,7 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 #include "serverdialog.hpp"
-#include "qbtd/controlsession.hpp"
+#include "uploaddialog.hpp"
 
 namespace qbtd {
 namespace widget {
@@ -12,16 +12,21 @@ namespace widget {
 class MainWindow::Private: public QObject {
 	Q_OBJECT
 public:
-	explicit Private( MainWindow * host );
+	explicit Private( MainWindow * owner );
+
+	void toggleUI( bool connected );
 
 public slots:
 	void onConnectToServer();
+	void onConnected();
+	void onError( bool stop, const QString & message );
+	void onUploadTorrent();
 
 public:
-	MainWindow * host;
+	MainWindow * owner;
 	Ui::MainWindow ui;
 	ServerDialog * serverDialog;
-	control::ControlSession * session;
+	UploadDialog * uploadDialog;
 };
 
 }

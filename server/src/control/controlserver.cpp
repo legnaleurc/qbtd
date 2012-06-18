@@ -1,4 +1,5 @@
 #include "controlserver_p.hpp"
+#include "qbtd/serversession.hpp"
 
 #include <QtCore/QtDebug>
 
@@ -12,7 +13,6 @@ void ControlServer::Private::destory( ControlServer * data ) {
 	delete data;
 }
 
-// TODO local socket, ipv4, ipv6 version
 ControlServer::Private::Private():
 server(),
 sessions() {
@@ -21,18 +21,20 @@ sessions() {
 
 void ControlServer::Private::onNewConnection() {
 	while( this->server.hasPendingConnections() ) {
-		QLocalSocket * socket = this->server.nextPendingConnection();
-		std::shared_ptr< ControlSession > session( new ControlSession( socket ), []( ControlSession * data )->void {
-			QMetaObject::invokeMethod( data, "deleteLater" );
-		} );
+		ControlSession * session = new ControlSession( this->server.nextPendingConnection(), this );
+		this->connect( session, SIGNAL( disconnected() ), SLOT( onSessionDisconnected() ) );
 		this->sessions.push_back( session );
 	}
 }
 
 void ControlServer::Private::onSessionDisconnected() {
 	ControlSession * session = static_cast< ControlSession * >( this->sender() );
-	auto it = std::remove_if( this->sessions.begin(), this->sessions.end(), [session]( decltype( this->sessions[0] ) s )->bool {
-		return session == s.get();
+	assert( session != nullptr || !"ControlSession casting failed" );
+	auto it = std::remove_if( this->sessions.begin(), this->sessions.end(), [session]( ControlSession * s )->bool {
+		return session == s;
+	} );
+	std::for_each( it, this->sessions.end(), []( ControlSession * s )->void {
+		s->deleteLater();
 	} );
 	this->sessions.erase( it, this->sessions.end() );
 }
@@ -54,7 +56,6 @@ ControlServer & ControlServer::instance() {
 
 ControlServer::ControlServer():
 p_( new Private ) {
-	this->p_->server.listen( "qbtd" );
 }
 
 ControlServer::~ControlServer() {
@@ -62,6 +63,17 @@ ControlServer::~ControlServer() {
 	this->p_->server.close();
 	// disconnect all session
 	for( auto it = this->p_->sessions.begin(); it != this->p_->sessions.end(); ++it ) {
+		// NOTE this slot will modify this->p_->sessions, so this **MUST** disconnect first
+		( *it )->disconnect( SIGNAL( disconnected() ), this->p_.get(), SLOT( onSessionDisconnected() ) );
 		( *it )->close();
+		( *it )->deleteLater();
 	}
+}
+
+bool ControlServer::listen( const QString & path ) {
+	return this->p_->server.listen( path );
+}
+
+bool ControlServer::listen( const QHostAddress & address, quint16 port ) {
+	return this->p_->server.listen( address, port );
 }
