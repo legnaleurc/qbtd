@@ -51,41 +51,55 @@ class Admin extends CI_Controller
    {
       $id = intval($id);
 
-      // Check if user is exist
-      if( $id != -1 ){
-         $info = $this->_getUserInfo($id);
-         if( $info != NULL ){
-            if($confirm == 'confirmed'){
-               // Delete User
-               $this->ion_auth->delete_user($id);
-               redirect('admin/');
+      // Admin can not delete himself
+      $user = $this->_getUserInfo();
+      if( $user['sn'] == $id ){
+         $data['page_title'] = 'User Deletion';
+         $data['loggedin'] = true;
+         $data['user'] =  $this->_getUserInfo();
+
+         $data['error_title'] = 'Can NOT Delete Yourself';
+         $data['error_detail'] = ' ';
+
+         $this->load->view('admin/delete_error', $data);
+      }else{
+
+         // Check if user is exist
+         if( $id != -1 ){
+            $info = $this->_getUserInfo($id);
+            if( $info != NULL ){
+               if($confirm == 'confirmed'){
+                  // Delete User
+                  $this->ion_auth->delete_user($id);
+                  redirect('admin/');
+               }else{
+                  // Show confirm page
+                  $data['page_title'] = 'User Delete Confirm';
+                  $data['loggedin'] = true;
+                  $data['user'] =  $this->_getUserInfo();
+                  $target = $this->_getUserInfo( $id );
+                  $data['target'] = array(
+                        'id' => $target['sn'],
+                        'username' => $target['id'],
+                        'email' => $target['email']
+                        );
+                  $this->load->view('admin/delete_confirm', $data);
+               }
             }else{
-               // Show confirm page
-               $data['page_title'] = 'User Delete Confirm';
+               // User does not exist
+               $data['page_title'] = 'User Delete Failed';
                $data['loggedin'] = true;
                $data['user'] =  $this->_getUserInfo();
-               $target = $this->_getUserInfo( $id );
-               $data['target'] = array(
-                     'id' => $target['sn'],
-                     'username' => $target['id'],
-                     'email' => $target['email']
-                     );
-               $this->load->view('admin/delete_confirm', $data);
+
+               $data['error_title'] = 'User does not exist';
+               $data['error_detail'] = 'User ID not Found';
+
+               $this->load->view('admin/delete_error', $data);
             }
          }else{
-            // User does not exist
-            $data['page_title'] = 'User Delete Failed';
-            $data['loggedin'] = true;
-            $data['user'] =  $this->_getUserInfo();
-
-            $data['error_title'] = 'User does not exist';
-            $data['error_detail'] = 'User ID not Found';
-
-            $this->load->view('admin/delete_error', $data);
+            // Invalid ID
+            redirect('admin/');
          }
-      }else{
-         // Invalid ID
-         redirect('admin/');
       }
    }
 
