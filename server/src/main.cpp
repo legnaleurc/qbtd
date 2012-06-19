@@ -37,7 +37,7 @@ int main( int argc, char * argv[] ) {
 	} catch( Exception & e ) {
 		QVariantList ctrl;
 		ctrl.push_back( QString( "pipe:/tmp/qbtd.socket" ) );
-		ctrl.push_back( QString( "localhost:9527" ) );
+		ctrl.push_back( QString( "0.0.0.0:9527" ) );
 
 		QVariantMap settings;
 		settings.insert( "control", ctrl );
