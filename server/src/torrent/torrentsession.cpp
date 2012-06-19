@@ -59,10 +59,9 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 
 // FIXME this method blocks MAIN thread
 void TorrentSession::addTorrent( const QUrl & url ) {
-	if( url.scheme() != "http" || url.scheme() != "https" ) {
+	if( url.scheme() != "http" && url.scheme() != "https" ) {
 		// TODO throw exception
 		return;
-		//return std::make_pair( false, QVariant( QString( "unsupported protocol: %1" ).arg( url.scheme() ) ) );
 	}
 
 	QNetworkAccessManager nam;
