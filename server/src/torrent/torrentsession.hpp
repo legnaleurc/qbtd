@@ -14,6 +14,7 @@ public:
 	static TorrentSession & instance();
 
 	void addTorrent( const QByteArray & data );
+	void addTorrent( const QUrl & url );
 	QVariantList listTorrent() const;
 
 private:

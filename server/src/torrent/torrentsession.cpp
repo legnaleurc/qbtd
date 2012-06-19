@@ -1,6 +1,11 @@
 #include "torrentsession_p.hpp"
 
-#include <QtCore/QtDebug>
+#include <QtCore/QUrl>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
+#include <QtCore/QTimer>
+#include <QtCore/QEventLoop>
 
 using qbtd::torrent::TorrentSession;
 
@@ -50,6 +55,34 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 	p.save_path = "/tmp";
 	p.ti = new libtorrent::torrent_info( e );
 	libtorrent::torrent_handle th = this->p_->session.add_torrent( p );
+}
+
+// FIXME this method blocks MAIN thread
+void TorrentSession::addTorrent( const QUrl & url ) {
+	if( url.scheme() != "http" || url.scheme() != "https" ) {
+		// TODO throw exception
+		return;
+		//return std::make_pair( false, QVariant( QString( "unsupported protocol: %1" ).arg( url.scheme() ) ) );
+	}
+
+	QNetworkAccessManager nam;
+	QNetworkRequest request( url );
+	QNetworkReply * reply = nam.get( request );
+	QEventLoop wait;
+	wait.connect( reply, SIGNAL( finished() ), SLOT( quit() ) );
+	wait.connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( quit() ) );
+	wait.connect( reply, SIGNAL( sslErrors( const QList< QSslError > & errors ) ), SLOT( quit() ) );
+	QTimer::singleShot( 10000, &wait, SLOT( quit() ) );
+	wait.exec();
+
+	if( reply->error() != QNetworkReply::NoError ) {
+		reply->deleteLater();
+		// TODO throw exception
+		return;
+	}
+	QByteArray torrent = reply->readAll();
+	reply->deleteLater();
+	this->addTorrent( torrent );
 }
 
 QVariantList TorrentSession::listTorrent() const {
