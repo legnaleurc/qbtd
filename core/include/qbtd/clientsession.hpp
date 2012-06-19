@@ -4,6 +4,7 @@
 #include "qbtd/config.hpp"
 
 #include <QtCore/QObject>
+#include <QtNetwork/QHostAddress>
 
 #include <memory>
 
@@ -16,6 +17,7 @@ public:
 	explicit ClientSession( QObject * parent = 0 );
 
 	void connectToServer( const QString & path );
+	void connectToServer( const QHostAddress & address, quint16 port );
 	void disconnectFromServer();
 	void request( const QString & command, const QVariant & args );
 

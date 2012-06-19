@@ -2,6 +2,7 @@
 #define QBTD_CONTROL_CONTROLSESSION_HPP
 
 #include <QtCore/QObject>
+#include <QtNetwork/QHostAddress>
 
 #include <functional>
 #include <memory>
@@ -18,6 +19,7 @@ public:
 	static ControlSession & instance();
 
 	void connectToServer( const QString & path );
+	void connectToServer( const QHostAddress & address, quint16 port );
 	void disconnectFromServer();
 	void request( const QString & command, const QVariant & args, SuccessCallback success );
 

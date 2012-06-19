@@ -36,9 +36,14 @@ void MainWindow::Private::onConnectToServer() {
 	if( QDialog::Accepted != this->serverDialog->exec() ) {
 		return;
 	}
-	QString lsp = this->serverDialog->getLocalServerPath();
-	// TODO handle failure
-	ControlSession::instance().connectToServer( lsp );
+	if( this->serverDialog->isLocal() ) {
+		QString lsp = this->serverDialog->getLocalServerPath();
+		// TODO handle failure
+		ControlSession::instance().connectToServer( lsp );
+	} else {
+		QPair< QHostAddress, quint16 > host = this->serverDialog->getTCPIP();
+		ControlSession::instance().connectToServer( host.first, host.second );
+	}
 }
 
 void MainWindow::Private::onConnected() {

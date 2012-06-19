@@ -10,7 +10,7 @@ class TcpSessionSocket::Private : public QObject {
 	Q_OBJECT
 public:
 	Private( QTcpSocket * socket, TcpSessionSocket * owner );
-	Private( const QHostAddress & address, TcpSessionSocket * owner );
+	Private( const QHostAddress & address, quint16 port, TcpSessionSocket * owner );
 
 public slots:
 	void onError( QAbstractSocket::SocketError socketError );
@@ -24,6 +24,7 @@ public:
 	TcpSessionSocket * owner;
 	QTcpSocket * socket;
 	QHostAddress address;
+	quint16 port;
 };
 
 }

@@ -1,6 +1,7 @@
 #include "clientsession_p.hpp"
 #include "localsessionsocket.hpp"
 #include "utility/json.hpp"
+#include "tcpsessionsocket.hpp"
 
 #include <QtCore/QTextStream>
 
@@ -67,6 +68,14 @@ void ClientSession::disconnectFromServer() {
 
 void ClientSession::connectToServer( const QString & path ) {
 	this->p_->socket = new LocalSessionSocket( path, this );
+	this->p_->connect( this->p_->socket, SIGNAL( opened() ), SLOT( onConnected() ) );
+	this->p_->connect( this->p_->socket, SIGNAL( closed() ), SLOT( onDisconnected() ) );
+	this->connect( this->p_->socket, SIGNAL( error( bool, const QString & ) ), SIGNAL( error( bool, const QString & ) ) );
+	this->p_->socket->open( QIODevice::ReadWrite );
+}
+
+void ClientSession::connectToServer( const QHostAddress & address, quint16 port ) {
+	this->p_->socket = new TcpSessionSocket( address, port, this );
 	this->p_->connect( this->p_->socket, SIGNAL( opened() ), SLOT( onConnected() ) );
 	this->p_->connect( this->p_->socket, SIGNAL( closed() ), SLOT( onDisconnected() ) );
 	this->connect( this->p_->socket, SIGNAL( error( bool, const QString & ) ), SIGNAL( error( bool, const QString & ) ) );

@@ -7,16 +7,18 @@ using qbtd::control::TcpSessionSocket;
 TcpSessionSocket::Private::Private( QTcpSocket * socket, TcpSessionSocket * owner ):
 owner( owner ),
 socket( socket ),
-address( socket->peerAddress() ) {
+address( socket->peerAddress() ),
+port( socket->peerPort() ) {
 	this->socket->setParent( this );
 	this->initialize();
 	this->owner->QIODevice::open( QIODevice::ReadWrite );
 }
 
-TcpSessionSocket::Private::Private( const QHostAddress & address, TcpSessionSocket * owner ):
+TcpSessionSocket::Private::Private( const QHostAddress & address, quint16 port, TcpSessionSocket * owner ):
 owner( owner ),
 socket( new QTcpSocket( this ) ),
-address( address ) {
+address( address ),
+port( port ) {
 	this->initialize();
 }
 
@@ -54,9 +56,9 @@ SessionSocket( parent ),
 p_( new Private( socket, this ) ) {
 }
 
-TcpSessionSocket::TcpSessionSocket( const QHostAddress & address, QObject * parent ):
+TcpSessionSocket::TcpSessionSocket( const QHostAddress & address, quint16 port, QObject * parent ):
 SessionSocket( parent ),
-p_( new Private( address, this ) ) {
+p_( new Private( address, port, this ) ) {
 }
 
 bool TcpSessionSocket::canReadLine() const {
@@ -76,7 +78,7 @@ bool TcpSessionSocket::open( OpenMode mode ) {
 		return false;
 	}
 	bool opened = this->QIODevice::open( mode );
-	this->p_->socket->connectToHost( this->p_->address, mode );
+	this->p_->socket->connectToHost( this->p_->address, this->p_->port, mode );
 	return opened;
 }
 

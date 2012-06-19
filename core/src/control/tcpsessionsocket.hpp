@@ -14,7 +14,7 @@ namespace control {
 class TcpSessionSocket: public SessionSocket {
 public:
 	explicit TcpSessionSocket( QTcpSocket * socket, QObject * parent = 0 );
-	explicit TcpSessionSocket( const QHostAddress & address, QObject * parent = 0 );
+	explicit TcpSessionSocket( const QHostAddress & address, quint16 port, QObject * parent = 0 );
 
 	virtual bool canReadLine() const;
 	virtual void close();

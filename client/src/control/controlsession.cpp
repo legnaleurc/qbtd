@@ -57,6 +57,10 @@ void ControlSession::connectToServer( const QString & path ) {
 	this->p_->session->connectToServer( path );
 }
 
+void ControlSession::connectToServer( const QHostAddress & address, quint16 port ) {
+	this->p_->session->connectToServer( address, port );
+}
+
 void ControlSession::disconnectFromServer() {
 	this->p_->session->disconnectFromServer();
 }

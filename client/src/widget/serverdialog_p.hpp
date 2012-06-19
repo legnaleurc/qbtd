@@ -4,15 +4,18 @@
 #include "serverdialog.hpp"
 #include "ui_serverdialog.h"
 
+#include <QtGui/QButtonGroup>
+
 namespace qbtd {
 namespace widget {
 
 class ServerDialog::Private {
 public:
-	explicit Private( ServerDialog * host );
+	explicit Private( ServerDialog * owner );
 
-	ServerDialog * host;
+	ServerDialog * owner;
 	Ui::ServerDialog ui;
+	QButtonGroup * group;
 };
 
 }
