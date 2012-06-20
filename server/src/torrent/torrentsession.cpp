@@ -1,5 +1,6 @@
 #include "torrentsession_p.hpp"
 #include "exception/torrentexception.hpp"
+#include "qbtd/settings.hpp"
 
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkAccessManager>
@@ -10,6 +11,7 @@
 
 using qbtd::torrent::TorrentSession;
 using qbtd::exception::TorrentException;
+using qbtd::utility::Settings;
 
 std::unique_ptr< TorrentSession, std::function< void ( TorrentSession * ) > > TorrentSession::Private::self;
 
@@ -38,8 +40,8 @@ TorrentSession & TorrentSession::instance() {
 
 TorrentSession::TorrentSession():
 p_( new Private ) {
-	// TODO read from configure
-	this->p_->session.listen_on( std::make_pair( 6881, 6889 ) );
+	QVariantList range = Settings::instance().get( "listen" ).toList();
+	this->p_->session.listen_on( std::make_pair( range.first().toInt(), range.last().toInt() ) );
 }
 
 TorrentSession::~TorrentSession() {
@@ -52,8 +54,7 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 		throw TorrentException( "bdecode failed" );
 	}
 	libtorrent::add_torrent_params p;
-	// TODO read from configure
-	p.save_path = "/tmp";
+	p.save_path = Settings::instance().get( "storage" ).toString().toUtf8();
 	p.ti = new libtorrent::torrent_info( e );
 	libtorrent::torrent_handle th = this->p_->session.add_torrent( p );
 }

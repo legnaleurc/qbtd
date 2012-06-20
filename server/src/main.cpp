@@ -35,12 +35,20 @@ int main( int argc, char * argv[] ) {
 	try {
 		Settings::initialize( "/tmp/qbtd.json" );
 	} catch( Exception & e ) {
-		QVariantList ctrl;
-		ctrl.push_back( QString( "pipe:/tmp/qbtd.socket" ) );
-		ctrl.push_back( QString( "0.0.0.0:9527" ) );
-
 		QVariantMap settings;
-		settings.insert( "control", ctrl );
+
+		QVariantList list;
+		list.push_back( QString( "pipe:/tmp/qbtd.socket" ) );
+		list.push_back( QString( "0.0.0.0:9527" ) );
+		settings.insert( "control", list );
+		list.clear();
+
+		settings.insert( "storage", QString( "/tmp" ) );
+
+		list.append( 6881 );
+		list.append( 6889 );
+		settings.insert( "listen", list );
+		list.clear();
 
 		Settings::initialize( "/tmp/qbtd.json", settings );
 	}
