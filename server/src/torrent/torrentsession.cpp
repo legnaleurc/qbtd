@@ -1,4 +1,5 @@
 #include "torrentsession_p.hpp"
+#include "exception/torrentexception.hpp"
 
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkAccessManager>
@@ -8,6 +9,7 @@
 #include <QtCore/QEventLoop>
 
 using qbtd::torrent::TorrentSession;
+using qbtd::exception::TorrentException;
 
 std::unique_ptr< TorrentSession, std::function< void ( TorrentSession * ) > > TorrentSession::Private::self;
 
@@ -47,8 +49,7 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 	libtorrent::lazy_entry e;
 	int ret = libtorrent::lazy_bdecode( data.data(), data.data() + data.size(), e );
 	if( ret != 0 ) {
-		// TODO throw exception
-		return;
+		throw TorrentException( "bdecode failed" );
 	}
 	libtorrent::add_torrent_params p;
 	// TODO read from configure
@@ -60,8 +61,7 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 // FIXME this method blocks MAIN thread
 void TorrentSession::addTorrent( const QUrl & url ) {
 	if( url.scheme() != "http" && url.scheme() != "https" ) {
-		// TODO throw exception
-		return;
+		throw TorrentException( QString( "can not fetch torrent from %1" ).arg( url.toString() ) );
 	}
 
 	QNetworkAccessManager nam;
@@ -76,8 +76,7 @@ void TorrentSession::addTorrent( const QUrl & url ) {
 
 	if( reply->error() != QNetworkReply::NoError ) {
 		reply->deleteLater();
-		// TODO throw exception
-		return;
+		throw TorrentException( QString( "can not fetch torrent because %1" ).arg( reply->errorString() ) );
 	}
 	QByteArray torrent = reply->readAll();
 	reply->deleteLater();
