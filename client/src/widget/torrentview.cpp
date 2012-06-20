@@ -1,8 +1,10 @@
 #include "torrentview_p.hpp"
 #include "control/controlsession.hpp"
+#include "torrentdelegate.hpp"
 
 using qbtd::widget::TorrentView;
 using qbtd::control::ControlSession;
+using qbtd::widget::TorrentDelegate;
 
 TorrentView::Private::Private( TorrentView * owner ):
 QObject(),
@@ -11,6 +13,7 @@ timer( new QTimer( this ) ),
 model( new QStandardItemModel( this ) ) {
 	this->model->setColumnCount( 2 );
 	this->owner->setModel( this->model );
+	this->owner->setItemDelegate( new TorrentDelegate( this ) );
 
 	this->timer->setInterval( 3000 );
 

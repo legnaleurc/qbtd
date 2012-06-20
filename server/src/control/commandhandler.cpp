@@ -1,6 +1,8 @@
 #include "commandhandler_p.hpp"
 #include "torrent/torrentsession.hpp"
 
+#include <QtCore/QUrl>
+
 #include <cassert>
 
 using qbtd::control::CommandHandler;
@@ -15,6 +17,7 @@ void CommandHandler::Private::destory( CommandHandler * data ) {
 CommandHandler::Private::Private():
 commands() {
 	this->commands.insert( "add", std::bind( &Private::add, this, std::placeholders::_1 ) );
+	this->commands.insert( "add_from_url", std::bind( &Private::addFromUrl, this, std::placeholders::_1 ) );
 	this->commands.insert( "list", std::bind( &Private::list, this, std::placeholders::_1 ) );
 }
 
@@ -22,6 +25,16 @@ std::pair< bool, QVariant > CommandHandler::Private::add( const QVariant & args 
 	QByteArray data = QByteArray::fromBase64( args.toByteArray() );
 	try {
 		TorrentSession::instance().addTorrent( data );
+		return std::make_pair( true, QVariant() );
+	} catch( std::exception & e ) {
+		return std::make_pair( false, QVariant( QString::fromUtf8( e.what() ) ) );
+	}
+}
+
+std::pair< bool, QVariant > CommandHandler::Private::addFromUrl( const QVariant & args ) {
+	QUrl url = args.toUrl();
+	try {
+		TorrentSession::instance().addTorrent( url );
 		return std::make_pair( true, QVariant() );
 	} catch( std::exception & e ) {
 		return std::make_pair( false, QVariant( QString::fromUtf8( e.what() ) ) );

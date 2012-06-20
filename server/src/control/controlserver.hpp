@@ -14,7 +14,7 @@ public:
 	static ControlServer & instance();
 
 	bool listen( const QString & path );
-	bool listen( const QHostAddress & address );
+	bool listen( const QHostAddress & address, quint16 port );
 
 private:
 	ControlServer();
