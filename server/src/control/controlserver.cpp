@@ -19,7 +19,7 @@ struct Helper {
 
 using qbtd::control::ControlServer;
 
-std::unique_ptr< ControlServer, std::function< void ( ControlServer * ) > > ControlServer::Private::self;
+std::unique_ptr< ControlServer, std::function< void ( ControlServer * ) > > ControlServer::Private::self( NULL, &Private::destory );
 
 void ControlServer::Private::destory( ControlServer * data ) {
 	delete data;

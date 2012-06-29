@@ -8,7 +8,7 @@
 using qbtd::control::CommandHandler;
 using qbtd::torrent::TorrentSession;
 
-std::unique_ptr< CommandHandler, std::function< void ( CommandHandler * ) > > CommandHandler::Private::self;
+std::unique_ptr< CommandHandler, std::function< void ( CommandHandler * ) > > CommandHandler::Private::self( NULL, &Private::destory );
 
 void CommandHandler::Private::destory( CommandHandler * data ) {
 	delete data;

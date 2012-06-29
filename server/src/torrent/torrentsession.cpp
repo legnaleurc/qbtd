@@ -9,7 +9,7 @@
 
 using qbtd::torrent::TorrentSession;
 
-std::unique_ptr< TorrentSession, std::function< void ( TorrentSession * ) > > TorrentSession::Private::self;
+std::unique_ptr< TorrentSession, std::function< void ( TorrentSession * ) > > TorrentSession::Private::self( NULL, &Private::destory );
 
 void TorrentSession::Private::destory( TorrentSession * data ) {
 	delete data;

@@ -13,7 +13,7 @@ using qbtd::utility::Settings;
 using qbtd::exception::FileError;
 using qbtd::exception::Exception;
 
-std::unique_ptr< Settings, std::function< void ( Settings * ) > > Settings::Private::self;
+std::unique_ptr< Settings, std::function< void ( Settings * ) > > Settings::Private::self( NULL, &Private::destroy );
 
 void Settings::Private::destroy( Settings * data ) {
 	delete data;
