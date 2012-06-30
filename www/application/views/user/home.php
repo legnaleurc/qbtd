@@ -22,17 +22,32 @@
    <div class="span6">
       <h2>Register</h2>
       <form class="well" action="<?php echo site_url('user/register/'); ?>" method="post" accept-charset="utf-8">
-         <label for="username">Username: </label>
-         <input type="text" name="username" value="" id="username">
+         <div id="username" class="control-group">
+            <label for="username" class="control-label">Username: </label>
+            <div id="" class="controls">
+               <input type="text" name="username" value="" id="username">
+               <span class="help-inline hide">Username has been used</span>
+            </div>
+         </div>
 
-         <label for="email">Email</label>
-         <input class="input-smail" type="text" name="email" value="" id="email">
+         <div id="email" class="control-group">
+            <label for="email" class="control-label">Email</label>
+            <div id="" class="controls">
+               <input class="input-smail" type="text" name="email" value="" id="email">
+               <span class="help-inline hide">Email has been used</span>
+            </div>
+         </div>
 
          <label for="password">Password: </label>
          <input type="password" name="password" value="" id="password">
 
-         <label for="ConfirmPassword">Confirm Password:</label>
-         <input type="password" name="password2" value="" id="password2">
+         <div id="password" class="control-group">
+            <label for="password2" class="control-label">Confirm Password:</label>
+            <div id="" class="controls">
+               <input type="password" name="password2" value="" id="password2">
+               <span class="help-inline hide">Password not match</span>
+            </div>
+         </div>
       
       <p><button class="btn" type=submit">Register</button></p>
       </form>
