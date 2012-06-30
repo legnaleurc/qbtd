@@ -41,11 +41,11 @@
          <label for="password">Password: </label>
          <input type="password" name="password" value="" id="password">
 
-         <div id="password" class="control-group">
+         <div id="pwd-group" class="control-group">
             <label for="password2" class="control-label">Confirm Password:</label>
             <div id="" class="controls">
                <input type="password" name="password2" value="" id="password2">
-               <span class="help-inline hide">Password not match</span>
+               <span id="pwd-help" class="help-inline hide">Password not match</span>
             </div>
          </div>
       
