@@ -154,12 +154,18 @@ class User extends CI_Controller {
 
    public function checkUsername($username)
    {
-      // code...
+      $result['found'] = false;
+      $query = $this->db->get_where('users', array('username' => $username ) );
+      if( $query->num_rows() > 0 )
+         $result['found'] = true;
+      $output = json_encode( $result );
+      echo $output;
    }
 
    public function checkMail($mail)
    {
-      // code...
+      $result['found'] = '';
+      $output = json_encode( $result );
    }
 
    private function _getUserInfo($id=NULL)
