@@ -152,7 +152,7 @@ class User extends CI_Controller {
       }
    }
 
-   public function checkUsername($username)
+   public function checkUsername($username = '')
    {
       $result['found'] = false;
       $query = $this->db->get_where('users', array('username' => $username ) );
