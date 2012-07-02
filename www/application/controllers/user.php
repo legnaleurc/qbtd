@@ -162,10 +162,14 @@ class User extends CI_Controller {
       echo $output;
    }
 
-   public function checkMail($mail)
+   public function checkMail($mail = '')
    {
-      $result['found'] = '';
+      $result['found'] = false;
+      $query = $this->db->get_where('users', array('email' => $mail ) );
+      if( $query->num_rows() > 0 )
+         $result['found'] = true;
       $output = json_encode( $result );
+      echo $output;
    }
 
    private function _getUserInfo($id=NULL)
