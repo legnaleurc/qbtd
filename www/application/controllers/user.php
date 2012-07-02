@@ -155,7 +155,7 @@ class User extends CI_Controller {
    public function checkUsername($username = '')
    {
       $result['found'] = false;
-      $query = $this->db->get_where('users', array('username' => $username ) );
+      $query = $this->db->get_where('users', array('username' => urldecode($username) ) );
       if( $query->num_rows() > 0 )
          $result['found'] = true;
       $output = json_encode( $result );
@@ -165,7 +165,7 @@ class User extends CI_Controller {
    public function checkMail($mail = '')
    {
       $result['found'] = false;
-      $query = $this->db->get_where('users', array('email' => $mail ) );
+      $query = $this->db->get_where('users', array('email' => urldecode($mail) ) );
       if( $query->num_rows() > 0 )
          $result['found'] = true;
       $output = json_encode( $result );
