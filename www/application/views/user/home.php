@@ -22,11 +22,11 @@
    <div class="span6">
       <h2>Register</h2>
       <form class="well" action="<?php echo site_url('user/register/'); ?>" method="post" accept-charset="utf-8">
-         <div id="username" class="control-group">
+         <div class="control-group" id="username-group">
             <label for="username" class="control-label">Username: </label>
             <div id="" class="controls">
                <input type="text" name="username" value="" id="username">
-               <span class="help-inline hide">Username has been used</span>
+               <span class="help-inline hide" id="username-hint"></span>
             </div>
          </div>
 
