@@ -30,11 +30,11 @@
             </div>
          </div>
 
-         <div id="email" class="control-group">
+         <div id="email-group" class="control-group">
             <label for="email" class="control-label">Email</label>
             <div id="" class="controls">
                <input class="input-smail" type="text" name="email" value="" id="email">
-               <span class="help-inline hide">Email has been used</span>
+               <span class="help-inline hide" id="email-hint"></span>
             </div>
          </div>
 
