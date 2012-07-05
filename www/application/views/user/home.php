@@ -8,7 +8,7 @@
       <h2>Login</h2>
       <form class="well" action="<?php echo site_url('user/login/'); ?>" method="post" accept-charset="utf-8">
          <label>Username: </label>
-         <input class="span3 " type="text" name="username" placeholder="longin id">
+         <input class="span3 " type="text" name="username" placeholder="longin id" autofocus>
          
          <label>Password: </label>
          <input class="span3" type="password" name="password" placeholder="your password">
