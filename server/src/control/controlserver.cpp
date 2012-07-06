@@ -4,6 +4,7 @@
 #include <QtCore/QtDebug>
 
 #include <cassert>
+#include <algorithm>
 
 using qbtd::control::ControlServer;
 
