@@ -6,7 +6,7 @@
 using qbtd::control::ControlSession;
 using qbtd::exception::JsonError;
 
-std::unique_ptr< ControlSession, std::function< void ( ControlSession * ) > > ControlSession::Private::self;
+std::unique_ptr< ControlSession, std::function< void ( ControlSession * ) > > ControlSession::Private::self( NULL, Private::destroy );
 
 void ControlSession::Private::destroy( ControlSession * data ) {
 	delete data;
