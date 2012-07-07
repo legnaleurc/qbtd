@@ -18,7 +18,7 @@ $('#username').blur( function(){
       checkStatReset('#username-group');
 
       $.ajax( {
-         url: 'http://zbla.us/demo/qbtd/www/index.php/user/checkUsername/' + username,
+         url: site_url + '/user/checkUsername/' + username,
          dataType: 'json',
          error: function(){ console.log('error'); },
          success: function(response){
@@ -57,7 +57,7 @@ $('#email').blur( function(){
       checkStatReset('#email-group');
 
       $.ajax( {
-         url: 'http://zbla.us/demo/qbtd/www/index.php/user/checkemail/' + encodeURIComponent(email),
+         url: site_url + '/user/checkemail/' + encodeURIComponent(email),
          dataType: 'json',
          error: function(){ console.log('error'); },
          success: function(response){
