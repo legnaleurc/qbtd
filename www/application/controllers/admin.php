@@ -103,6 +103,15 @@ class Admin extends CI_Controller
       }
    }
 
+   public function searchUser($key)
+   {
+      $out = '';
+      $this->db->select('id, username, email');
+      $this->db->like('username', $key);
+      $query = $this->db->get('users');
+      echo json_encode( $query->result_array() );
+   }
+
    private function _getUserInfo($id=NULL)
    {
       $info = $this->ion_auth->user($id)->row();
