@@ -1,3 +1,4 @@
+// Register form
 $('#password2').blur( function(){
    if( $('#password').attr('value') !== $('#password2').attr('value') ){
       $('#pwd-group').addClass('error');
@@ -105,4 +106,28 @@ function checkOkay( groupId, message ){
    $( groupId ).addClass('success');
    $( groupId + ' > div > span.help-inline' ).text( message );
    $( groupId + ' > div > span.help-inline' ).removeClass('hide');
+}
+
+// User search at admin panel
+$('#username-key').keyup(  function(){
+      console.log( $('#username-key').attr('value') );
+});
+
+function clearTable(){
+   $('#user-list > tbody > tr').remove();
+}
+
+function addRow( data ){
+   $('#user-list > tbody ').append(
+         '<tr> ' + 
+            '<td>' + data.id + '</td>' +
+            '<td>' + data.username + '</td>' +
+            '<td>' + data.email + '</td>' +
+            '<td>' +
+               '<a href="' + site_url + '/admin/deleteUser/' + data.id + '" class="action-link">' +
+               '<i class="icon-trash action-icon"></i> Delete </a>' +
+               '<a href="#" class="action-link"><i class="icon-pencil action-icon"></i>Edit</a>' +
+            '</td>' +
+         '</tr>'
+      );
 }
