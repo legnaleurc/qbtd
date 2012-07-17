@@ -20,7 +20,7 @@
 
    <div class="tab-content">
 
-      <table class="table" style="width: 100%;">
+      <table class="table" id="user-list" style="width: 100%;">
          <thead>
             <tr>
                <td>ID</td>
