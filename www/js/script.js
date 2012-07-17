@@ -110,11 +110,35 @@ function checkOkay( groupId, message ){
 
 // User search at admin panel
 $('#username-key').keyup(  function(){
-      console.log( $('#username-key').attr('value') );
+      var keyword = $('#username-key').attr('value');
+      fetchUser( keyword );
 });
 
 function clearTable(){
    $('#user-list > tbody > tr').remove();
+}
+
+function fetchUser( keyword ){
+
+   if( keyword != '' ){
+      $.ajax( {
+         url: site_url + '/admin/searchUser/' + keyword,
+         dataType: 'json',
+         error: function(){ console.log('error'); },
+         success: function(response){
+            renewTable( response );
+         }
+      });
+   }else{
+      clearTable();
+   }
+}
+
+function renewTable( list ){
+   clearTable();
+   for( index in list ){
+      addRow( list[index] );
+   }
 }
 
 function addRow( data ){
