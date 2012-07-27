@@ -103,12 +103,14 @@ class Admin extends CI_Controller
       }
    }
 
-   public function searchUser($key)
+   public function searchUser($key='')
    {
-      $out = '';
+      $key = trim( urldecode( $key ) );
       $this->db->select('id, username, email');
-      $this->db->like('username', $key);
-      $this->db->or_like('email', $key);
+      if( $key != '' ){
+         $this->db->like('username', $key);
+         $this->db->or_like('email', $key);
+      }
       $query = $this->db->get('users');
       echo json_encode( $query->result_array() );
    }

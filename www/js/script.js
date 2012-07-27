@@ -119,19 +119,14 @@ function clearTable(){
 }
 
 function fetchUser( keyword ){
-
-   if( keyword != '' ){
-      $.ajax( {
-         url: site_url + '/admin/searchUser/' + keyword,
-         dataType: 'json',
-         error: function(){ console.log('error'); },
-         success: function(response){
-            renewTable( response );
-         }
-      });
-   }else{
-      clearTable();
-   }
+   $.ajax( {
+      url: site_url + '/admin/searchUser/' + encodeURIComponent( keyword ),
+      dataType: 'json',
+      error: function(){ console.log('error'); },
+      success: function(response){
+         renewTable( response );
+      }
+   });
 }
 
 function renewTable( list ){
@@ -155,3 +150,5 @@ function addRow( data ){
          '</tr>'
       );
 }
+
+// JSONP
