@@ -108,6 +108,7 @@ class Admin extends CI_Controller
       $out = '';
       $this->db->select('id, username, email');
       $this->db->like('username', $key);
+      $this->db->or_like('email', $key);
       $query = $this->db->get('users');
       echo json_encode( $query->result_array() );
    }
