@@ -39,7 +39,7 @@
                   <td><?php echo $u->email; ?></td>
                   <td>
                      <a href="<?php echo site_url('admin/deleteUser/'.$u->id); ?>" class="action-link"><i class="icon-trash action-icon"></i>Delete</a>
-                     <a href="#" class="action-link"><i class="icon-pencil action-icon"></i>Edit</a>
+                     <a href="<?php echo site_url('admin/edit/'.$u->id); ?>" class="action-link"><i class="icon-pencil action-icon"></i>Edit</a>
                   </td>
                </tr>
             <?php endforeach; ?>

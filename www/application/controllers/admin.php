@@ -115,6 +115,33 @@ class Admin extends CI_Controller
       echo json_encode( $query->result_array() );
    }
 
+   public function edit($uid = -1, $comfirm = 0)
+   {
+      $data['user'] = $this->_getUserInfo();
+      $data['page_title'] = 'User Edit';
+      $data['loggedin'] = true;
+      if( $uid != -1 ){
+         // Edit user information
+         $u = $this->ion_auth->user($uid)->row();
+         $user = array(
+            'id' => $u->id,
+            'username' => $u->username,
+            'email' => $u->email
+            );
+         $data['info'] = $user;
+         $this->load->view('admin/info_edit', $data);
+      }else{
+         // no input
+         $data['alert'] = array(
+               'type' => 'error',
+               'title' => 'User ID not found',
+               'text' => 'Can not find user by this ID.',
+               'return' => site_url('admin/')
+               );
+         $this->load->view('alert', $data);
+      }
+   }
+
    private function _getUserInfo($id=NULL)
    {
       $info = $this->ion_auth->user($id)->row();
