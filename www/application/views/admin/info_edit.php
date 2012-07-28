@@ -5,7 +5,7 @@
 <h2>User Management</h2>
 <p style="margin-top: 25px;"> </p>
 
-<div>
+<div class="well">
 
    <p>ID: <?php echo $info['id']; ?> </p>
 
