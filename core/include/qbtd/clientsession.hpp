@@ -26,6 +26,7 @@ signals:
 	void disconnected();
 	void error( bool stop, const QString & message );
 	void responsed( int id, bool result, const QVariant & data );
+	void notified( const QString & event, const QVariant & data );
 
 private:
 	class Private;

@@ -11,7 +11,7 @@ ClientSession::Private::Private():
 QObject(),
 socket( nullptr ),
 engine( new QScriptEngine( this ) ),
-counter( 1 ) {
+counter( 0 ) {
 }
 
 void ClientSession::Private::onDisconnected() {
@@ -49,10 +49,22 @@ void ClientSession::Private::onResponse() {
 	using qbtd::utility::fromJSON;
 	QVariantMap map = fromJSON( line, this->engine ).toMap();
 
-	int id = map.value( "id" ).toInt();
-	bool result = map.value( "result" ).toBool();
-	QVariant data = map.value( "data" );
-	emit this->responsed( id, result, data );
+	int id = map.count( "id" );
+	if( id == 0 ) {
+		// notify
+		QString event = map.value( "event" ).toString();
+		QVariant data = map.value( "data" );
+		emit this->notified( event, data );
+	} else if( id == 1 ) {
+		// response
+		id = map.value( "id" ).toInt();
+		bool result = map.value( "result" ).toBool();
+		QVariant data = map.value( "data" );
+		emit this->responsed( id, result, data );
+	} else {
+		// id never > 1
+		// TODO throw exception
+	}
 }
 
 ClientSession::ClientSession( QObject * parent ):
@@ -61,6 +73,7 @@ p_( new Private ) {
 	this->connect( this->p_.get(), SIGNAL( connected() ), SIGNAL( connected() ) );
 	this->connect( this->p_.get(), SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
 	this->connect( this->p_.get(), SIGNAL( responsed( int, bool, const QVariant & ) ), SIGNAL( responsed( int, bool, const QVariant & ) ) );
+	this->connect( this->p_.get(), SIGNAL( notified( const QString &, const QVariant & ) ), SIGNAL( notified( const QString &, const QVariant & ) ) );
 }
 
 void ClientSession::disconnectFromServer() {
@@ -87,7 +100,7 @@ void ClientSession::connectToServer( const QHostAddress & address, quint16 port 
 
 int ClientSession::request( const QString & command, const QVariant & args ) {
 	QVariantMap packet;
-	// TODO handle overflow
+	// may overflow, but we allow negative IDs
 	int id = this->p_->counter.fetchAndAddRelaxed( 1 );
 	packet.insert( "id", id );
 	packet.insert( "command", command );

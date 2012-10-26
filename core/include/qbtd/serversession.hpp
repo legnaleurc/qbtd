@@ -16,6 +16,7 @@ class QBTD_DLL ServerSession: public QObject {
 public:
 	void disconnectFromClient();
 	void response( int id, bool result, const QVariant & data );
+	void notify( const QString & event, const QVariant & data );
 
 signals:
 	void disconnected();

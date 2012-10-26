@@ -75,3 +75,14 @@ void ServerSession::response( int id, bool result, const QVariant & data ) {
 
 	this->p_->socket->write( json.toUtf8().toBase64().append( "\n" ) );
 }
+
+void ServerSession::notify( const QString & event, const QVariant & data ) {
+	QVariantMap packet;
+	packet.insert( "event", event );
+	packet.insert( "data", data );
+
+	using qbtd::utility::toJSON;
+	QString json = toJSON( packet, this->p_->engine );
+
+	this->p_->socket->write( json.toUtf8().toBase64().append( "\n" ) );
+}

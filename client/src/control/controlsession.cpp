@@ -20,7 +20,6 @@ handlers() {
 	this->connect( this->session, SIGNAL( responsed( int, bool, const QVariant & ) ), SLOT( onResponsed( int, bool, const QVariant & ) ) );
 }
 
-// TODO handle id=0
 void ControlSession::Private::onResponsed( int id, bool result, const QVariant & data ) {
 	QWriteLocker locker( &this->lock );
 	Q_UNUSED( locker )
