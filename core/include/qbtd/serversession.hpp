@@ -14,9 +14,6 @@ namespace control {
 class QBTD_DLL ServerSession: public QObject {
 	Q_OBJECT
 public:
-	ServerSession( QLocalSocket * socket, QObject * parent );
-	ServerSession( QTcpSocket * socket, QObject * parent );
-
 	void disconnectFromClient();
 	void response( bool result, const QVariant & data );
 
@@ -25,6 +22,10 @@ signals:
 	void requested( const QString & command, const QVariant & args );
 
 private:
+	friend class SessionServer;
+	ServerSession( QLocalSocket * socket, QObject * parent );
+	ServerSession( QTcpSocket * socket, QObject * parent );
+
 	class Private;
 	std::shared_ptr< Private > p_;
 };
