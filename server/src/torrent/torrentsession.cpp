@@ -71,7 +71,7 @@ void TorrentSession::addTorrent( const QUrl & url ) {
 	QEventLoop wait;
 	wait.connect( reply, SIGNAL( finished() ), SLOT( quit() ) );
 	wait.connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( quit() ) );
-	wait.connect( reply, SIGNAL( sslErrors( const QList< QSslError > & errors ) ), SLOT( quit() ) );
+	wait.connect( reply, SIGNAL( sslErrors( const QList< QSslError > & ) ), SLOT( quit() ) );
 	QTimer::singleShot( 10000, &wait, SLOT( quit() ) );
 	wait.exec();
 
