@@ -4,6 +4,10 @@
 #include "controlsession.hpp"
 #include "qbtd/clientsession.hpp"
 
+#include <QtCore/QReadWriteLock>
+
+#include <unordered_map>
+
 namespace qbtd {
 namespace control {
 
@@ -16,11 +20,12 @@ public:
 	Private();
 
 public slots:
-	void onResponsed( bool result, const QVariant & data );
+	void onResponsed( int id, bool result, const QVariant & data );
 
 public:
+	QReadWriteLock lock;
 	ClientSession * session;
-	SuccessCallback success;
+	std::unordered_map< int, SuccessCallback > handlers;
 };
 
 }

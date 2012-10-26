@@ -19,13 +19,13 @@ public:
 	void connectToServer( const QString & path );
 	void connectToServer( const QHostAddress & address, quint16 port );
 	void disconnectFromServer();
-	void request( const QString & command, const QVariant & args );
+	int request( const QString & command, const QVariant & args );
 
 signals:
 	void connected();
 	void disconnected();
 	void error( bool stop, const QString & message );
-	void responsed( bool result, const QVariant & data );
+	void responsed( int id, bool result, const QVariant & data );
 
 private:
 	class Private;

@@ -14,17 +14,27 @@ void ControlSession::Private::destroy( ControlSession * data ) {
 
 ControlSession::Private::Private():
 QObject(),
+lock(),
 session( new ClientSession( this ) ),
-success() {
-	this->connect( this->session, SIGNAL( responsed( bool, const QVariant & ) ), SLOT( onResponsed( bool, const QVariant & ) ) );
+handlers() {
+	this->connect( this->session, SIGNAL( responsed( int, bool, const QVariant & ) ), SLOT( onResponsed( int, bool, const QVariant & ) ) );
 }
 
-void ControlSession::Private::onResponsed( bool result, const QVariant & data ) {
-	if( !this->success ) {
+// TODO handle id=0
+void ControlSession::Private::onResponsed( int id, bool result, const QVariant & data ) {
+	QWriteLocker locker( &this->lock );
+	Q_UNUSED( locker )
+	auto it = this->handlers.find( id );
+	if( it == this->handlers.end() ) {
+		// id not found
+		// TODO warning message
 		return;
 	}
-	this->success( result, data );
-	this->success = nullptr;
+	if( it->second ) {
+		// some actions do not have success callback
+		it->second( result, data );
+	}
+	this->handlers.erase( it );
 }
 
 void ControlSession::initialize() {
@@ -66,14 +76,12 @@ void ControlSession::disconnectFromServer() {
 }
 
 void ControlSession::request( const QString & command, const QVariant & args, SuccessCallback success ) {
-	if( this->p_->success ) {
-		return;
-	}
-	this->p_->success = success;
 	try {
-		this->p_->session->request( command, args );
+		int id = this->p_->session->request( command, args );
+		QWriteLocker locker( &this->p_->lock );
+		Q_UNUSED( locker )
+		this->p_->handlers.insert( std::make_pair( id, success ) );
 	} catch( JsonError & e ) {
-		this->p_->success = nullptr;
 		emit this->error( false, QObject::tr( "Can not encode request: %1" ).arg( e.getMessage() ) );
 	}
 }

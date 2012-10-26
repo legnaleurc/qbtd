@@ -4,6 +4,7 @@
 #include "qbtd/clientsession.hpp"
 #include "sessionsocket.hpp"
 
+#include <QtCore/QAtomicInt>
 #include <QtScript/QScriptEngine>
 
 namespace qbtd {
@@ -23,11 +24,12 @@ public slots:
 signals:
 	void connected();
 	void disconnected();
-	void responsed( bool result, const QVariant & data );
+	void responsed( int id, bool result, const QVariant & data );
 
 public:
 	SessionSocket * socket;
 	QScriptEngine * engine;
+	QAtomicInt counter;
 };
 
 }

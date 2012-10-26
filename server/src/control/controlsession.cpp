@@ -14,20 +14,20 @@ host( host ),
 session( session ) {
 	this->session->setParent( this );
 	this->host->connect( this->session, SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
-	this->connect( this->session, SIGNAL( requested( const QString &, const QVariant & ) ), SLOT( onRequested( const QString &, const QVariant & ) ) );
+	this->connect( this->session, SIGNAL( requested( int, const QString &, const QVariant & ) ), SLOT( onRequested( int, const QString &, const QVariant & ) ) );
 }
 
 ControlSession::Private::~Private() {
 	this->session->deleteLater();
 }
 
-void ControlSession::Private::onRequested( const QString & command, const QVariant & args ) {
-	qDebug() << command << args;
+void ControlSession::Private::onRequested( int id, const QString & command, const QVariant & args ) {
+	qDebug() << id << command << args;
 	auto response = CommandHandler::instance().execute( command, args );
 	try {
-		this->session->response( response.first, response.second );
+		this->session->response( id, response.first, response.second );
 	} catch( JsonError & e ) {
-		this->session->response( false, QString( "server can not encode response" ) );
+		this->session->response( id, false, QString( "server can not encode response" ) );
 	}
 }
 

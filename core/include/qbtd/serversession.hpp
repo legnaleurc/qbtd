@@ -15,11 +15,11 @@ class QBTD_DLL ServerSession: public QObject {
 	Q_OBJECT
 public:
 	void disconnectFromClient();
-	void response( bool result, const QVariant & data );
+	void response( int id, bool result, const QVariant & data );
 
 signals:
 	void disconnected();
-	void requested( const QString & command, const QVariant & args );
+	void requested( int id, const QString & command, const QVariant & args );
 
 private:
 	friend class SessionServer;

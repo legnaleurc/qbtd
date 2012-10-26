@@ -20,7 +20,7 @@ public slots:
 
 signals:
 	void disconnected();
-	void requested( const QString & command, const QVariant & args );
+	void requested( int id, const QString & command, const QVariant & args );
 
 public:
 	ServerSession * host;

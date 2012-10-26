@@ -39,35 +39,39 @@ void ServerSession::Private::onRequested() {
 	QString line = sin.readLine();
 
 	QString json = QString::fromUtf8( QByteArray::fromBase64( line.toUtf8() ) );
-	QVariantMap map = utility::fromJSON( json, this->engine ).toMap();
+	using qbtd::utility::fromJSON;
+	QVariantMap map = fromJSON( json, this->engine ).toMap();
 
+	int id = map.value( "id" ).toInt();
 	QString command = map.value( "command" ).toString();
 	QVariant args = map.value( "args" );
-	emit this->requested( command, args );
+	emit this->requested( id, command, args );
 }
 
 ServerSession::ServerSession( QLocalSocket * socket, QObject * parent ):
 QObject( parent ),
 p_( new Private( new LocalSessionSocket( socket ), this ) ) {
-	this->connect( this->p_.get(), SIGNAL( requested( const QString &, const QVariant & ) ), SIGNAL( requested( const QString &, const QVariant & ) ) );
+	this->connect( this->p_.get(), SIGNAL( requested( int, const QString &, const QVariant & ) ), SIGNAL( requested( int, const QString &, const QVariant & ) ) );
 }
 
 ServerSession::ServerSession( QTcpSocket * socket, QObject * parent ):
 QObject( parent ),
 p_( new Private( new TcpSessionSocket( socket ), this ) ) {
-	this->connect( this->p_.get(), SIGNAL( requested( const QString &, const QVariant & ) ), SIGNAL( requested( const QString &, const QVariant & ) ) );
+	this->connect( this->p_.get(), SIGNAL( requested( int, const QString &, const QVariant & ) ), SIGNAL( requested( int, const QString &, const QVariant & ) ) );
 }
 
 void ServerSession::disconnectFromClient() {
 	this->p_->socket->close();
 }
 
-void ServerSession::response( bool result, const QVariant & data ) {
-	QVariantMap package;
-	package.insert( "result", result );
-	package.insert( "data", data );
+void ServerSession::response( int id, bool result, const QVariant & data ) {
+	QVariantMap packet;
+	packet.insert( "id", id );
+	packet.insert( "result", result );
+	packet.insert( "data", data );
 
-	QString json = utility::toJSON( package, this->p_->engine );
+	using qbtd::utility::toJSON;
+	QString json = toJSON( packet, this->p_->engine );
 
 	this->p_->socket->write( json.toUtf8().toBase64().append( "\n" ) );
 }

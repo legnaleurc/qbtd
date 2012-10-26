@@ -13,7 +13,7 @@ public:
 	virtual ~Private();
 
 public slots:
-	void onRequested( const QString & command, const QVariant & args );
+	void onRequested( int id, const QString & command, const QVariant & args );
 
 public:
 	ControlSession * host;
