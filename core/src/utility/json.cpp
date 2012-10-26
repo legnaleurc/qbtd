@@ -55,7 +55,7 @@ QVariant fromJSON( const QString & json, QScriptEngine * engine ) {
 	engine->globalObject().setProperty( "tmp", engine->nullValue() );
 	if( engine->hasUncaughtException() ) {
 		v = engine->uncaughtException();
-		throw exception::JsonError( v.property( "message" ).toString() );
+		throw exception::JsonError( v.property( "message" ).toString(), __FILE__, __LINE__ );
 	}
 	return v.toVariant();
 }
@@ -66,7 +66,7 @@ QString toJSON( const QVariant & variant, QScriptEngine * engine ) {
 	engine->globalObject().setProperty( "tmp", engine->nullValue() );
 	if( engine->hasUncaughtException() ) {
 		QScriptValue v = engine->uncaughtException();
-		throw exception::JsonError( v.property( "message" ).toString() );
+		throw exception::JsonError( v.property( "message" ).toString(), __FILE__, __LINE__ );
 	}
 	return json;
 }
@@ -79,7 +79,7 @@ QString toJSON( const QVariant & variant, const QString & spacer, QScriptEngine 
 	engine->globalObject().setProperty( "tmp", engine->nullValue() );
 	if( engine->hasUncaughtException() ) {
 		QScriptValue v = engine->uncaughtException();
-		throw exception::JsonError( v.property( "message" ).toString() );
+		throw exception::JsonError( v.property( "message" ).toString(), __FILE__, __LINE__ );
 	}
 	return json;
 }

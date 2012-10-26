@@ -51,7 +51,7 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 	libtorrent::lazy_entry e;
 	int ret = libtorrent::lazy_bdecode( data.data(), data.data() + data.size(), e );
 	if( ret != 0 ) {
-		throw TorrentException( "bdecode failed" );
+		throw TorrentException( "bdecode failed", __FILE__, __LINE__ );
 	}
 	libtorrent::add_torrent_params p;
 	p.save_path = Settings::instance().get( "storage" ).toString().toUtf8();
@@ -62,7 +62,7 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 // FIXME this method blocks MAIN thread
 void TorrentSession::addTorrent( const QUrl & url ) {
 	if( url.scheme() != "http" && url.scheme() != "https" ) {
-		throw TorrentException( QString( "can not fetch torrent from %1" ).arg( url.toString() ) );
+		throw TorrentException( QString( "can not fetch torrent from %1" ).arg( url.toString() ), __FILE__, __LINE__ );
 	}
 
 	QNetworkAccessManager nam;
@@ -77,7 +77,7 @@ void TorrentSession::addTorrent( const QUrl & url ) {
 
 	if( reply->error() != QNetworkReply::NoError ) {
 		reply->deleteLater();
-		throw TorrentException( QString( "can not fetch torrent because %1" ).arg( reply->errorString() ) );
+		throw TorrentException( QString( "can not fetch torrent because %1" ).arg( reply->errorString() ), __FILE__, __LINE__ );
 	}
 	QByteArray torrent = reply->readAll();
 	reply->deleteLater();

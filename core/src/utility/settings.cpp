@@ -29,7 +29,7 @@ data() {
 void Settings::Private::load() {
 	QFile fin( this->path );
 	if( !fin.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-		throw FileError( fin.errorString() );
+		throw FileError( fin.errorString(), __FILE__, __LINE__ );
 	}
 	QTextStream sin( &fin );
 	sin.setCodec( QTextCodec::codecForName( "UTF-8" ) );
@@ -43,7 +43,7 @@ void Settings::Private::save() {
 	QString json = toJSON( this->data, "\t", &this->engine );
 	QFile fout( this->path );
 	if( !fout.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
-		throw FileError( fout.errorString() );
+		throw FileError( fout.errorString(), __FILE__, __LINE__ );
 	}
 	QTextStream sout( &fout );
 	sout.setCodec( QTextCodec::codecForName( "UTF-8" ) );

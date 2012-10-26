@@ -8,14 +8,14 @@ namespace exception {
 
 class FileError: public Exception {
 public:
-	explicit FileError( int errnum );
-	explicit FileError( const char * message );
-	FileError( const char * message, std::size_t n );
-	explicit FileError( const wchar_t * message );
-	FileError( const wchar_t * message, std::size_t n );
-	explicit FileError( const std::string & message );
-	explicit FileError( const std::wstring & message );
-	explicit FileError( const QString & message );
+	explicit FileError( int errnum, const char * file, std::size_t line );
+	explicit FileError( const char * message, const char * file, std::size_t line );
+	FileError( const char * message, std::size_t n, const char * file, std::size_t line );
+	explicit FileError( const wchar_t * message, const char * file, std::size_t line );
+	FileError( const wchar_t * message, std::size_t n, const char * file, std::size_t line );
+	explicit FileError( const std::string & message, const char * file, std::size_t line );
+	explicit FileError( const std::wstring & message, const char * file, std::size_t line );
+	explicit FileError( const QString & message, const char * file, std::size_t line );
 	virtual ~FileError() throw();
 };
 

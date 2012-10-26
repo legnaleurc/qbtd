@@ -8,14 +8,14 @@ namespace exception {
 
 class JsonError: public Exception {
 public:
-	explicit JsonError( int errnum );
-	explicit JsonError( const char * message );
-	JsonError( const char * message, std::size_t n );
-	explicit JsonError( const wchar_t * message );
-	JsonError( const wchar_t * message, std::size_t n );
-	explicit JsonError( const std::string & message );
-	explicit JsonError( const std::wstring & message );
-	explicit JsonError( const QString & message );
+	explicit JsonError( int errnum, const char * file, std::size_t line );
+	explicit JsonError( const char * message, const char * file, std::size_t line );
+	JsonError( const char * message, std::size_t n, const char * file, std::size_t line );
+	explicit JsonError( const wchar_t * message, const char * file, std::size_t line );
+	JsonError( const wchar_t * message, std::size_t n, const char * file, std::size_t line );
+	explicit JsonError( const std::string & message, const char * file, std::size_t line );
+	explicit JsonError( const std::wstring & message, const char * file, std::size_t line );
+	explicit JsonError( const QString & message, const char * file, std::size_t line );
 	virtual ~JsonError() throw();
 };
 
