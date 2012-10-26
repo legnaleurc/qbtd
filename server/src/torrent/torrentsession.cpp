@@ -54,7 +54,7 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 		throw TorrentException( "bdecode failed", __FILE__, __LINE__ );
 	}
 	libtorrent::add_torrent_params p;
-	p.save_path = Settings::instance().get( "storage" ).toString().toUtf8();
+	p.save_path = Settings::instance().get( "storage" ).toString().toStdString();
 	p.ti = new libtorrent::torrent_info( e );
 	libtorrent::torrent_handle th = this->p_->session.add_torrent( p );
 }
