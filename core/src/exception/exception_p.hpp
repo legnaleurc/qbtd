@@ -13,6 +13,7 @@ public:
 	QString msg;
 	QString file;
 	std::size_t line;
+	QString cachedString;
 };
 
 }

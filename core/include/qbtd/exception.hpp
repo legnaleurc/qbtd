@@ -25,6 +25,7 @@ public:
 	const QString & getMessage() const;
 	const QString & getFile() const;
 	std::size_t getLine() const;
+	const QString & toString() const;
 
 private:
 	class Private;

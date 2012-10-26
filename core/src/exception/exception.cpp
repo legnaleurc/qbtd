@@ -5,7 +5,8 @@ using qbtd::exception::Exception;
 Exception::Private::Private( const QString & msg, const char * file, std::size_t line ):
 msg( msg ),
 file( QString::fromLocal8Bit( file ) ),
-line( line ) {
+line( line ),
+cachedString( QString( "%1 (%2::%3)" ).arg( msg ).arg( this->file ).arg( line ) ) {
 }
 
 Exception::Exception( int errnum, const char * file, std::size_t line ):
@@ -65,4 +66,8 @@ const QString & Exception::getFile() const {
 
 std::size_t Exception::getLine() const {
 	return this->p_->line;
+}
+
+const QString & Exception::toString() const {
+	return this->p_->cachedString;
 }
