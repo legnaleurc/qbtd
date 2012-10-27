@@ -6,10 +6,12 @@
 
 #include <memory>
 
+#include "qbtd/config.hpp"
+
 namespace qbtd {
 namespace utility {
 
-class Settings {
+class QBTD_DLL Settings {
 public:
 	static void initialize( const QString & path );
 	static void initialize( const QString & path, const QVariantMap & settings );
