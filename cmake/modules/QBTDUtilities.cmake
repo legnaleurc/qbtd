@@ -1,4 +1,4 @@
-function(group_sources root)
+function(group_sources)
 	function(__group_sources__ root prefix)
 		file(GLOB entries RELATIVE "${root}" "${root}/*")
 		foreach(entry ${entries})
@@ -13,8 +13,14 @@ function(group_sources root)
 		source_group("${prefix}" FILES ${group})
 	endfunction()
 
-	get_filename_component(prefix "${root}" NAME)
-	__group_sources__("${root}" "${prefix}")
+	function(__group_single_root__ root)
+		get_filename_component(prefix "${root}" NAME)
+		__group_sources__("${root}" "${prefix}")
+	endfunction()
+
+	foreach(root ${ARGN})
+		__group_single_root__("${root}")
+	endforeach()
 endfunction()
 
 function(find_moc_headers results)

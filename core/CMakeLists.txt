@@ -12,8 +12,7 @@ file(GLOB_RECURSE QBTD_CORE_HEADERS "src/*.hpp")
 file(GLOB_RECURSE QBTD_CORE_PUBLIC_HEADERS "include/*.hpp")
 
 find_moc_headers(QBTD_CORE_MOC_HEADERS ${QBTD_CORE_HEADERS})
-group_sources("${CMAKE_CURRENT_SOURCE_DIR}/include")
-group_sources("${CMAKE_CURRENT_SOURCE_DIR}/src")
+group_sources("${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 qt4_wrap_cpp(QBTD_CORE_MOC_SOURCES ${QBTD_CORE_MOC_HEADERS})
 
