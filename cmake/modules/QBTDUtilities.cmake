@@ -9,7 +9,7 @@ function(group_sources)
 				list(APPEND group "${abspath}")
 			endif()
 		endforeach()
-		string(REPLACE "/" "\\" prefix "${prefix}")
+		file(TO_NATIVE_PATH "${prefix}" prefix)
 		source_group("${prefix}" FILES ${group})
 	endfunction()
 
