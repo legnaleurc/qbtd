@@ -5,9 +5,7 @@
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
-#include <QtCore/QTimer>
-#include <QtCore/QEventLoop>
+#include <QtNetwork/QSslError>
 
 using qbtd::torrent::TorrentSession;
 using qbtd::exception::TorrentException;
@@ -20,7 +18,35 @@ void TorrentSession::Private::destory( TorrentSession * data ) {
 }
 
 TorrentSession::Private::Private():
-session() {
+QObject(),
+session(),
+nam() {
+}
+
+void TorrentSession::Private::onTorrentFileReady() {
+	QNetworkReply * reply = static_cast< QNetworkReply * >( this->sender() );
+	QByteArray torrent = reply->readAll();
+	reply->deleteLater();
+	try {
+		self->addTorrent( torrent );
+	} catch( TorrentException & e ) {
+		emit this->error( e.getMessage() );
+	}
+}
+
+void TorrentSession::Private::onTorrentFileError( QNetworkReply::NetworkError ) {
+	QNetworkReply * reply = static_cast< QNetworkReply * >( this->sender() );
+	QString message = reply->errorString();
+	reply->deleteLater();
+	emit this->error( QString( "can not fetch torrent because %1" ).arg( message ) );
+}
+
+void TorrentSession::Private::onTorrentFileSSLError( const QList< QSslError > & errors ) {
+	QNetworkReply * reply = static_cast< QNetworkReply * >( this->sender() );
+	reply->deleteLater();
+	for( auto it = errors.begin(); it != errors.end(); ++it ) {
+		emit this->error( it->errorString() );
+	}
 }
 
 void TorrentSession::initialize() {
@@ -65,23 +91,11 @@ void TorrentSession::addTorrent( const QUrl & url ) {
 		throw TorrentException( QString( "can not fetch torrent from %1" ).arg( url.toString() ), __FILE__, __LINE__ );
 	}
 
-	QNetworkAccessManager nam;
 	QNetworkRequest request( url );
-	QNetworkReply * reply = nam.get( request );
-	QEventLoop wait;
-	wait.connect( reply, SIGNAL( finished() ), SLOT( quit() ) );
-	wait.connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( quit() ) );
-	wait.connect( reply, SIGNAL( sslErrors( const QList< QSslError > & ) ), SLOT( quit() ) );
-	QTimer::singleShot( 10000, &wait, SLOT( quit() ) );
-	wait.exec();
-
-	if( reply->error() != QNetworkReply::NoError ) {
-		reply->deleteLater();
-		throw TorrentException( QString( "can not fetch torrent because %1" ).arg( reply->errorString() ), __FILE__, __LINE__ );
-	}
-	QByteArray torrent = reply->readAll();
-	reply->deleteLater();
-	this->addTorrent( torrent );
+	QNetworkReply * reply = this->p_->nam.get( request );
+	this->p_->connect( reply, SIGNAL( finished() ), SLOT( onTorrentFileReady() ) );
+	this->p_->connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( onTorrentFileError( QNetworkReply::NetworkError ) ) );
+	this->p_->connect( reply, SIGNAL( sslErrors( const QList< QSslError > & ) ), SLOT( onTorrentFileSSLError( const QList< QSslError > & ) ) );
 }
 
 QVariantList TorrentSession::listTorrent() const {
