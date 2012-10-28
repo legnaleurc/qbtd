@@ -1,19 +1,15 @@
 find_package(Qt4 REQUIRED QtNetwork)
 
 include(${QT_USE_FILE})
+include(QBTDUtilities)
 
 # glob all sources
 file(GLOB_RECURSE QBTD_CLIENT_SOURCES "src/*.cpp")
 file(GLOB_RECURSE QBTD_CLIENT_HEADERS "src/*.hpp")
 file(GLOB_RECURSE QBTD_CLIENT_FORMS "src/*.ui")
 
-set(QBTD_CLIENT_MOC_HEADERS "")
-foreach(hdr ${QBTD_CLIENT_HEADERS})
-	file(STRINGS "${hdr}" tmp REGEX "Q_OBJECT")
-	if(tmp)
-		list(APPEND QBTD_CLIENT_MOC_HEADERS "${hdr}")
-	endif()
-endforeach()
+find_moc_headers(QBTD_CLIENT_MOC_HEADERS ${QBTD_CLIENT_HEADERS})
+group_sources("${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 qt4_wrap_cpp(QBTD_CLIENT_MOC_SOURCES ${QBTD_CLIENT_MOC_HEADERS})
 qt4_wrap_ui(QBTD_CLIENT_UIC_HEADERS ${QBTD_CLIENT_FORMS})

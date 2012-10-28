@@ -4,18 +4,14 @@ find_package(LibtorrentRasterbar REQUIRED)
 include(${QT_USE_FILE})
 include(${LIBTORRENT_RASTERBAR_USE_FILE})
 include_directories("${CMAKE_SOURCE_DIR}/core/include" "${CMAKE_CURRENT_SOURCE_DIR}/src")
+include(QBTDUtilities)
 
 # glob all sources
 file(GLOB_RECURSE QBTD_SERVER_SOURCES "src/*.cpp")
 file(GLOB_RECURSE QBTD_SERVER_HEADERS "src/*.hpp")
 
-set(QBTD_SERVER_MOC_HEADERS "")
-foreach(hdr ${QBTD_SERVER_HEADERS})
-	file(STRINGS "${hdr}" tmp REGEX "Q_OBJECT")
-	if(tmp)
-		list(APPEND QBTD_SERVER_MOC_HEADERS "${hdr}")
-	endif()
-endforeach()
+find_moc_headers(QBTD_SERVER_MOC_HEADERS ${QBTD_SERVER_HEADERS})
+group_sources("${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 qt4_wrap_cpp(QBTD_SERVER_MOC_SOURCES ${QBTD_SERVER_MOC_HEADERS})
 

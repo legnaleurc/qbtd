@@ -1,6 +1,7 @@
 find_package(Qt4 REQUIRED QtNetwork QtScript)
 
 include(${QT_USE_FILE})
+include(QBTDUtilities)
 
 include_directories("include" "src")
 add_definitions(-DQBTD_LIBRARY)
@@ -10,13 +11,9 @@ file(GLOB_RECURSE QBTD_CORE_SOURCES "src/*.cpp")
 file(GLOB_RECURSE QBTD_CORE_HEADERS "src/*.hpp")
 file(GLOB_RECURSE QBTD_CORE_PUBLIC_HEADERS "include/*.hpp")
 
-set(QBTD_CORE_MOC_HEADERS "")
-foreach(hdr ${QBTD_CORE_HEADERS} ${QBTD_CORE_PUBLIC_HEADERS})
-	file(STRINGS "${hdr}" tmp REGEX "Q_OBJECT")
-	if(tmp)
-		list(APPEND QBTD_CORE_MOC_HEADERS "${hdr}")
-	endif()
-endforeach()
+find_moc_headers(QBTD_CORE_MOC_HEADERS ${QBTD_CORE_HEADERS})
+group_sources("${CMAKE_CURRENT_SOURCE_DIR}/include")
+group_sources("${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 qt4_wrap_cpp(QBTD_CORE_MOC_SOURCES ${QBTD_CORE_MOC_HEADERS})
 
