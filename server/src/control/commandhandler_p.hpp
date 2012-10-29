@@ -12,9 +12,6 @@ namespace control {
 
 class CommandHandler::Private {
 public:
-	static std::unique_ptr< CommandHandler, std::function< void ( CommandHandler * ) > > self;
-	static void destory( CommandHandler * );
-
 	Private();
 
 	std::pair< bool, QVariant > add( const QVariant & args );

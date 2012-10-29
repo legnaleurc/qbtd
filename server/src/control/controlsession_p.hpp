@@ -2,6 +2,7 @@
 #define QBTD_CONTROL_CONTROLSESSION_HPP_
 
 #include "controlsession.hpp"
+#include "commandhandler.hpp"
 
 namespace qbtd {
 namespace control {
@@ -18,6 +19,7 @@ public slots:
 public:
 	ControlSession * host;
 	ServerSession * session;
+	CommandHandler commands;
 };
 
 }

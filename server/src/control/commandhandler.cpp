@@ -8,12 +8,6 @@
 using qbtd::control::CommandHandler;
 using qbtd::torrent::TorrentSession;
 
-std::unique_ptr< CommandHandler, std::function< void ( CommandHandler * ) > > CommandHandler::Private::self;
-
-void CommandHandler::Private::destory( CommandHandler * data ) {
-	delete data;
-}
-
 CommandHandler::Private::Private():
 commands() {
 	this->commands.insert( "add", std::bind( &Private::add, this, std::placeholders::_1 ) );
@@ -50,26 +44,8 @@ std::pair< bool, QVariant > CommandHandler::Private::list( const QVariant & /*ar
 	}
 }
 
-void CommandHandler::initialize() {
-	if( Private::self ) {
-		return;
-	}
-	Private::self.reset( new CommandHandler );
-	Private::self.get_deleter() = Private::destory;
-}
-
-CommandHandler & CommandHandler::instance() {
-	if( !Private::self ) {
-		assert( !"not initialized" );
-	}
-	return *Private::self;
-}
-
 CommandHandler::CommandHandler():
 p_( new Private ) {
-}
-
-CommandHandler::~CommandHandler() {
 }
 
 std::pair< bool, QVariant > CommandHandler::execute( const QString & command, const QVariant & args ) const {

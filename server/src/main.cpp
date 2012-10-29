@@ -1,6 +1,5 @@
 #include "torrent/torrentsession.hpp"
 #include "control/controlserver.hpp"
-#include "control/commandhandler.hpp"
 #include "qbtd/settings.hpp"
 #include "qbtd/exception.hpp"
 
@@ -53,7 +52,6 @@ int main( int argc, char * argv[] ) {
 		Settings::initialize( "/tmp/qbtd.json", settings );
 	}
 	qbtd::torrent::TorrentSession::initialize();
-	qbtd::control::CommandHandler::initialize();
 	ControlServer::initialize();
 
 	QVariantList ctrls = Settings::instance().get( "control" ).toList();
