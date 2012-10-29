@@ -30,6 +30,7 @@ public slots:
 	void onTorrentFileSSLError( const QList< QSslError > & );
 
 signals:
+	void broadcast( const QString & event, const QVariant & data );
 	void notify( const QString & event, const QVariant & data );
 
 public:

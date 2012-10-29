@@ -62,6 +62,7 @@ void CommandHandler::Private::onTorrentFileReady() {
 	reply->deleteLater();
 	try {
 		TorrentSession::instance().addTorrent( torrent );
+		emit this->broadcast( QString( "add" ), QString() );
 	} catch( TorrentException & e ) {
 		emit this->notify( QString( "warning" ), e.getMessage() );
 	}
@@ -85,6 +86,7 @@ void CommandHandler::Private::onTorrentFileSSLError( const QList< QSslError > & 
 CommandHandler::CommandHandler( QObject * parent ):
 QObject( parent ),
 p_( new Private ) {
+	this->connect( this->p_.get(), SIGNAL( broadcast( const QString &, const QVariant & ) ), SIGNAL( broadcast( const QString &, const QVariant & ) ) );
 	this->connect( this->p_.get(), SIGNAL( notify( const QString &, const QVariant & ) ), SIGNAL( notify( const QString &, const QVariant & ) ) );
 }
 

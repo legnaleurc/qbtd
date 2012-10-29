@@ -20,9 +20,16 @@ sessions() {
 	this->connect( &this->server, SIGNAL( newConnection() ), SLOT( onNewConnection() ) );
 }
 
+void ControlServer::Private::onBroadcastRequired( const QString & event, const QVariant & data ) {
+	std::for_each( this->sessions.begin(), this->sessions.end(), [&event, &data]( ControlSession * s )->void {
+		s->notify( event, data );
+	} );
+}
+
 void ControlServer::Private::onNewConnection() {
 	while( this->server.hasPendingConnections() ) {
 		ControlSession * session = new ControlSession( this->server.nextPendingConnection(), this );
+		this->connect( session, SIGNAL( broadcastRequired( const QString &, const QVariant & ) ), SLOT( onBroadcastRequired( const QString &, const QVariant & ) ) );
 		this->connect( session, SIGNAL( disconnected() ), SLOT( onSessionDisconnected() ) );
 		this->sessions.push_back( session );
 	}

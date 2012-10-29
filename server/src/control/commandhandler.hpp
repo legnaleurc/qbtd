@@ -17,6 +17,7 @@ public:
 	std::pair< bool, QVariant > execute( const QString & command, const QVariant & args ) const;
 
 signals:
+	void broadcast( const QString & event, const QVariant & data );
 	void notify( const QString & event, const QVariant & data );
 
 private:

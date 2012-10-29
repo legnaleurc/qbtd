@@ -16,8 +16,10 @@ public:
 	explicit ControlSession( ServerSession * session, QObject * parent = 0 );
 
 	void close();
+	void notify( const QString & event, const QVariant & data ) const;
 
 signals:
+	void broadcastRequired( const QString & event, const QVariant & data );
 	void disconnected();
 
 private:

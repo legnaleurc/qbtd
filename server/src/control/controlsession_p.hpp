@@ -10,10 +10,11 @@ namespace control {
 class ControlSession::Private: public QObject {
 	Q_OBJECT
 public:
-	explicit Private( ServerSession * session, ControlSession * host );
+	Private( ServerSession * session, ControlSession * host );
 	virtual ~Private();
 
 public slots:
+	void onNotify( const QString & event, const QVariant & data );
 	void onRequested( int id, const QString & command, const QVariant & args );
 
 public:

@@ -21,6 +21,7 @@ public:
 	Private();
 
 public slots:
+	void onBroadcastRequired( const QString & event, const QVariant & data );
 	void onNewConnection();
 	void onSessionDisconnected();
 
