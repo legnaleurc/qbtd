@@ -2,11 +2,6 @@
 #include "exception/torrentexception.hpp"
 #include "qbtd/settings.hpp"
 
-#include <QtCore/QUrl>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QSslError>
-
 using qbtd::torrent::TorrentSession;
 using qbtd::exception::TorrentException;
 using qbtd::utility::Settings;
@@ -18,35 +13,7 @@ void TorrentSession::Private::destory( TorrentSession * data ) {
 }
 
 TorrentSession::Private::Private():
-QObject(),
-session(),
-nam() {
-}
-
-void TorrentSession::Private::onTorrentFileReady() {
-	QNetworkReply * reply = static_cast< QNetworkReply * >( this->sender() );
-	QByteArray torrent = reply->readAll();
-	reply->deleteLater();
-	try {
-		self->addTorrent( torrent );
-	} catch( TorrentException & e ) {
-		emit this->error( e.getMessage() );
-	}
-}
-
-void TorrentSession::Private::onTorrentFileError( QNetworkReply::NetworkError ) {
-	QNetworkReply * reply = static_cast< QNetworkReply * >( this->sender() );
-	QString message = reply->errorString();
-	reply->deleteLater();
-	emit this->error( QString( "can not fetch torrent because %1" ).arg( message ) );
-}
-
-void TorrentSession::Private::onTorrentFileSSLError( const QList< QSslError > & errors ) {
-	QNetworkReply * reply = static_cast< QNetworkReply * >( this->sender() );
-	reply->deleteLater();
-	for( auto it = errors.begin(); it != errors.end(); ++it ) {
-		emit this->error( it->errorString() );
-	}
+session() {
 }
 
 void TorrentSession::initialize() {
@@ -83,19 +50,6 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 	p.save_path = Settings::instance().get( "storage" ).toString().toStdString();
 	p.ti = new libtorrent::torrent_info( e );
 	libtorrent::torrent_handle th = this->p_->session.add_torrent( p );
-}
-
-// FIXME this method blocks MAIN thread
-void TorrentSession::addTorrent( const QUrl & url ) {
-	if( url.scheme() != "http" && url.scheme() != "https" ) {
-		throw TorrentException( QString( "can not fetch torrent from %1" ).arg( url.toString() ), __FILE__, __LINE__ );
-	}
-
-	QNetworkRequest request( url );
-	QNetworkReply * reply = this->p_->nam.get( request );
-	this->p_->connect( reply, SIGNAL( finished() ), SLOT( onTorrentFileReady() ) );
-	this->p_->connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( onTorrentFileError( QNetworkReply::NetworkError ) ) );
-	this->p_->connect( reply, SIGNAL( sslErrors( const QList< QSslError > & ) ), SLOT( onTorrentFileSSLError( const QList< QSslError > & ) ) );
 }
 
 QVariantList TorrentSession::listTorrent() const {

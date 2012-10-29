@@ -8,22 +8,17 @@
 namespace qbtd {
 namespace torrent {
 
-class TorrentSession: public QObject {
-	Q_OBJECT
+class TorrentSession {
 public:
 	static void initialize();
 	static TorrentSession & instance();
 
 	void addTorrent( const QByteArray & data );
-	void addTorrent( const QUrl & url );
 	QVariantList listTorrent() const;
-
-signals:
-	void error( const QString & message );
 
 private:
 	TorrentSession();
-	virtual ~TorrentSession();
+	~TorrentSession();
 	TorrentSession( const TorrentSession & );
 	TorrentSession & operator =( const TorrentSession & );
 	class Private;

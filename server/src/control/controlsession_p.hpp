@@ -19,7 +19,7 @@ public slots:
 public:
 	ControlSession * host;
 	ServerSession * session;
-	CommandHandler commands;
+	CommandHandler * commands;
 };
 
 }
