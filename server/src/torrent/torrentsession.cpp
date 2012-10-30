@@ -54,7 +54,7 @@ QVariantMap TorrentSession::addTorrent( const QByteArray & data ) {
 	QVariantMap m;
 	m.insert( "name", QString::fromStdString( th.name() ) );
 	m.insert( "progress", static_cast< double >( status.progress ) );
-	m.insert( "info_hash", QString::fromStdString( th.info_hash().to_string() ) );
+	m.insert( "info_hash", QByteArray( th.info_hash().to_string().c_str() ).toHex() );
 	return m;
 }
 
@@ -66,7 +66,7 @@ QVariantList TorrentSession::listTorrent() const {
 		m.insert( "name", QString::fromStdString( it->name() ) );
 		libtorrent::torrent_status status = it->status();
 		m.insert( "progress", static_cast< double >( status.progress ) );
-		m.insert( "info_hash", QString::fromStdString( it->info_hash().to_string() ) );
+		m.insert( "info_hash", QByteArray( it->info_hash().to_string().c_str() ).toHex() );
 		l.append( m );
 	}
 	return l;
