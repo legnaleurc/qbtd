@@ -40,7 +40,7 @@ p_( new Private ) {
 TorrentSession::~TorrentSession() {
 }
 
-void TorrentSession::addTorrent( const QByteArray & data ) {
+QVariantMap TorrentSession::addTorrent( const QByteArray & data ) {
 	libtorrent::lazy_entry e;
 	int ret = libtorrent::lazy_bdecode( data.data(), data.data() + data.size(), e );
 	if( ret != 0 ) {
@@ -50,6 +50,12 @@ void TorrentSession::addTorrent( const QByteArray & data ) {
 	p.save_path = Settings::instance().get( "storage" ).toString().toStdString();
 	p.ti = new libtorrent::torrent_info( e );
 	libtorrent::torrent_handle th = this->p_->session.add_torrent( p );
+	libtorrent::torrent_status status = th.status();
+	QVariantMap m;
+	m.insert( "name", QString::fromStdString( th.name() ) );
+	m.insert( "progress", static_cast< double >( status.progress ) );
+	m.insert( "info_hash", QString::fromStdString( th.info_hash().to_string() ) );
+	return m;
 }
 
 QVariantList TorrentSession::listTorrent() const {

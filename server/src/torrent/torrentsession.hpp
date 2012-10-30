@@ -13,7 +13,7 @@ public:
 	static void initialize();
 	static TorrentSession & instance();
 
-	void addTorrent( const QByteArray & data );
+	QVariantMap addTorrent( const QByteArray & data );
 	QVariantList listTorrent() const;
 
 private:

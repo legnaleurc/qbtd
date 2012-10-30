@@ -23,8 +23,8 @@ nam() {
 std::pair< bool, QVariant > CommandHandler::Private::add( const QVariant & args ) {
 	QByteArray data = QByteArray::fromBase64( args.toByteArray() );
 	try {
-		TorrentSession::instance().addTorrent( data );
-		return std::make_pair( true, QVariant() );
+		auto data_ = TorrentSession::instance().addTorrent( data );
+		return std::make_pair( true, data_ );
 	} catch( std::exception & e ) {
 		return std::make_pair( false, QVariant( QString::fromUtf8( e.what() ) ) );
 	}
@@ -61,8 +61,8 @@ void CommandHandler::Private::onTorrentFileReady() {
 	QByteArray torrent = reply->readAll();
 	reply->deleteLater();
 	try {
-		TorrentSession::instance().addTorrent( torrent );
-		emit this->broadcast( QString( "add" ), QString() );
+		auto data = TorrentSession::instance().addTorrent( torrent );
+		emit this->broadcast( QString( "add" ), data );
 	} catch( TorrentException & e ) {
 		emit this->notify( QString( "warning" ), e.getMessage() );
 	}
