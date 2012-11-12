@@ -1,11 +1,15 @@
 #include "mainwindow_p.hpp"
 #include "control/controlsession.hpp"
+#include "model/torrentinfo.hpp"
 
 #include <QtCore/QUrl>
 #include <QtGui/QMessageBox>
 
+#include <QtCore/QtDebug>
+
 using qbtd::widget::MainWindow;
 using qbtd::control::ControlSession;
+using qbtd::model::TorrentInfo;
 
 MainWindow::Private::Private( MainWindow * owner ):
 owner( owner ),
@@ -20,16 +24,12 @@ uploadDialog( new UploadDialog( owner ) ) {
 	this->connect( this->ui.action_Upload_Torrent, SIGNAL( triggered() ), SLOT( onUploadTorrent() ) );
 	this->connect( &ControlSession::instance(), SIGNAL( connected() ), SLOT( onConnected() ) );
 	this->connect( &ControlSession::instance(), SIGNAL( error( bool, const QString & ) ), SLOT( onError( bool, const QString & ) ) );
+	this->connect( &ControlSession::instance(), SIGNAL( listed( const QList< qbtd::model::TorrentInfo > & ) ), SLOT( onListed( const QList< qbtd::model::TorrentInfo > & ) ) );
 }
 
 void MainWindow::Private::toggleUI( bool connected ) {
 	this->ui.action_Connect_To_Server->setDisabled( connected );
 	this->ui.action_Upload_Torrent->setEnabled( connected );
-	if( connected ) {
-		this->ui.torrentView->start();
-	} else {
-		this->ui.torrentView->stop();
-	}
 }
 
 void MainWindow::Private::onConnectToServer() {
@@ -48,6 +48,7 @@ void MainWindow::Private::onConnectToServer() {
 
 void MainWindow::Private::onConnected() {
 	this->toggleUI( true );
+	ControlSession::instance().list();
 }
 
 void MainWindow::Private::onError( bool stop, const QString & message ) {
@@ -58,14 +59,20 @@ void MainWindow::Private::onError( bool stop, const QString & message ) {
 	QMessageBox::warning( this->owner, QObject::tr( "Session Error" ), message );
 }
 
+void MainWindow::Private::onListed( const QList< TorrentInfo > & torrents ) {
+	for( auto it = torrents.begin(); it != torrents.end(); ++it ) {
+		this->ui.torrentView->addTorrent( *it );
+	}
+}
+
 void MainWindow::Private::onUploadTorrent() {
 	if( QDialog::Accepted != this->uploadDialog->exec() ) {
 		return;
 	}
 	if( this->uploadDialog->isRemote() ) {
-		ControlSession::instance().request( "add_from_url", this->uploadDialog->getURL(), nullptr );
+		ControlSession::instance().addTorrentUrl( this->uploadDialog->getURL() );
 	} else {
-		ControlSession::instance().request( "add", this->uploadDialog->getLocalFile(), nullptr );
+		ControlSession::instance().addTorrentFile( this->uploadDialog->getLocalFile() );
 	}
 }
 

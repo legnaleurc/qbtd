@@ -2,27 +2,18 @@
 #define QBTD_WIDGET_TORRENTVIEW_HPP_
 
 #include "torrentview.hpp"
-
-#include <QtCore/QTimer>
-#include <QtGui/QStandardItemModel>
+#include "model/torrentmodel.hpp"
 
 namespace qbtd {
 namespace widget {
 
-class TorrentView::Private: public QObject {
-	Q_OBJECT
+class TorrentView::Private {
 public:
-	Private( TorrentView * owner );
-
-	void doList( bool result, const QVariant & data );
-
-public slots:
-	void onTimeout();
+	explicit Private( TorrentView * owner );
 
 public:
 	TorrentView * owner;
-	QTimer * timer;
-	QStandardItemModel * model;
+	qbtd::model::TorrentModel * model;
 };
 
 }

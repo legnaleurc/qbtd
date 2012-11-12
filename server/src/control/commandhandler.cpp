@@ -62,7 +62,7 @@ void CommandHandler::Private::onTorrentFileReady() {
 	reply->deleteLater();
 	try {
 		auto data = TorrentSession::instance().addTorrent( torrent );
-		emit this->broadcast( QString( "add" ), data );
+		emit this->broadcast( QString( "torrent_added" ), data );
 	} catch( TorrentException & e ) {
 		emit this->notify( QString( "warning" ), e.getMessage() );
 	}

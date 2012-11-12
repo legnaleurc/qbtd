@@ -6,14 +6,16 @@
 #include <memory>
 
 namespace qbtd {
+namespace model {
+class TorrentInfo;
+}
 namespace widget {
 
 class TorrentView: public QTreeView {
 public:
 	explicit TorrentView( QWidget * parent );
 
-	void start();
-	void stop();
+	void addTorrent( const qbtd::model::TorrentInfo & torrent );
 
 private:
 	class Private;

@@ -14,18 +14,28 @@ namespace control {
 class ControlSession::Private: public QObject {
 	Q_OBJECT
 public:
+	typedef std::function< void ( bool, const QVariant & ) > ResponseCallback;
+	typedef std::function< void ( const QVariant & ) > NotifyCallback;
+
 	static std::unique_ptr< ControlSession, std::function< void ( ControlSession * ) > > self;
 	static void destroy( ControlSession * data );
 
 	Private();
 
+	int request( const QString & command, const QVariant & args, ResponseCallback success );
+
 public slots:
+	void onNotified( const QString & event, const QVariant & data );
 	void onResponsed( int id, bool result, const QVariant & data );
+
+signals:
+	void torrentAdded( const qbtd::model::TorrentInfo & torrent );
 
 public:
 	QReadWriteLock lock;
 	ClientSession * session;
-	std::unordered_map< int, SuccessCallback > handlers;
+	std::unordered_map< int, ResponseCallback > responseHandlers;
+	QHash< QString, NotifyCallback > notifyHandlers;
 };
 
 }
