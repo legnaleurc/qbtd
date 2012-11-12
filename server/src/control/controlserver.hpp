@@ -15,6 +15,7 @@ public:
 
 	bool listen( const QString & path );
 	bool listen( const QHostAddress & address, quint16 port );
+	void progressChanged( const QByteArray & infoHash, qreal progress );
 
 private:
 	ControlServer();

@@ -85,3 +85,10 @@ bool ControlServer::listen( const QString & path ) {
 bool ControlServer::listen( const QHostAddress & address, quint16 port ) {
 	return this->p_->server.listen( address, port );
 }
+
+void ControlServer::progressChanged( const QByteArray & infoHash, qreal progress ) {
+	QVariantMap data;
+	data.insert( "info_hash", infoHash );
+	data.insert( "progress", progress );
+	this->p_->onBroadcastRequired( "progress_updated", data );
+}

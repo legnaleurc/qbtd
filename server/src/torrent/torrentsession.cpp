@@ -1,6 +1,22 @@
+#include <libtorrent/alert.hpp>
+#include <libtorrent/alert_types.hpp>
+
 #include "torrentsession_p.hpp"
 #include "exception/torrentexception.hpp"
 #include "qbtd/settings.hpp"
+#include "control/controlserver.hpp"
+
+namespace {
+
+struct AlertVisiter {
+	void operator()( const libtorrent::block_finished_alert & a ) const {
+		auto infoHash = QByteArray( a.handle.info_hash().to_string().c_str() ).toHex();
+		auto progress = a.handle.status().progress;
+		qbtd::control::ControlServer::instance().progressChanged( infoHash, progress );
+	}
+};
+
+}
 
 using qbtd::torrent::TorrentSession;
 using qbtd::exception::TorrentException;
@@ -13,7 +29,29 @@ void TorrentSession::Private::destory( TorrentSession * data ) {
 }
 
 TorrentSession::Private::Private():
-session() {
+session(),
+timer() {
+	using libtorrent::alert;
+	this->session.set_alert_mask( alert::error_notification | alert::progress_notification );
+
+	this->timer.setInterval( 3000 );
+	this->connect( &this->timer, SIGNAL( timeout() ), SLOT( onBroadcastTimeout() ) );
+}
+
+void TorrentSession::Private::onBroadcastTimeout() {
+	using libtorrent::alert;
+	using libtorrent::handle_alert;
+	using libtorrent::unhandled_alert;
+	using libtorrent::block_finished_alert;
+	AlertVisiter visiter;
+	for( auto a = this->session.pop_alert(); a.get(); a = this->session.pop_alert() ) {
+		auto msg = a->message();
+		try {
+			handle_alert< block_finished_alert >( a, visiter );
+		} catch( unhandled_alert & ) {
+			// ignore unhandled alert
+		}
+	}
 }
 
 void TorrentSession::initialize() {
@@ -35,6 +73,7 @@ TorrentSession::TorrentSession():
 p_( new Private ) {
 	QVariantList range = Settings::instance().get( "listen" ).toList();
 	this->p_->session.listen_on( std::make_pair( range.first().toInt(), range.last().toInt() ) );
+	this->p_->timer.start();
 }
 
 TorrentSession::~TorrentSession() {
